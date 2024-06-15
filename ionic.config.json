@@ -1,0 +1,7 @@
+{
+  "name": "MoniWiseApp",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

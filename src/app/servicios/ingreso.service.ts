@@ -13,7 +13,7 @@ export class IngresoService {
     return this.http.post(
       this.srvG.URLAPI + url,
       this.srvG.objectToFormData({
-        usuario_nombre: ObjetoUsuario.nombtre,
+        usuario_nombre: ObjetoUsuario.nombre,
         usuario_cedula: ObjetoUsuario.cedula,
         usuario_telefono: ObjetoUsuario.telefono,
         usuario_correo: ObjetoUsuario.correo,

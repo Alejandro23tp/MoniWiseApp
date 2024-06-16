@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { LoadingController } from '@ionic/angular';
 import { MenuService } from 'src/app/servicios/menu.service';
 
 @Component({
@@ -7,15 +8,15 @@ import { MenuService } from 'src/app/servicios/menu.service';
   templateUrl: './tabs.component.html',
   styleUrls: ['./tabs.component.scss'],
 })
-export class TabsComponent  implements OnInit {
-
-  tipo_usuario_id : number = 0;
-  ListaMenus : any = [];
+export class TabsComponent implements OnInit {
+  tipo_usuario_id: number = 0;
+  ListaMenus: any = [];
 
   constructor(
-    private srvM : MenuService,
-    private router: Router
-  ) { }
+    private srvM: MenuService,
+    private router: Router,
+    private loadig: LoadingController
+  ) {}
 
   ngOnInit() {
     //Obtener el tipo de usuario logueado en localStorage
@@ -24,20 +25,22 @@ export class TabsComponent  implements OnInit {
       const usuarioLogueadoObj = JSON.parse(usuarioLogueado).tipo_usuario_id;
       this.tipo_usuario_id = usuarioLogueadoObj;
       console.log(this.tipo_usuario_id);
-      
-      
     }
 
     this.obtenerMenusPorTipoUsuario();
-
-
   }
 
   obtenerMenusPorTipoUsuario() {
-    this.srvM.obtenerMenusPorTipoUsuario(this.tipo_usuario_id).subscribe((res: any) => {
-      this.ListaMenus = res.menus;
-      console.log(this.ListaMenus);
-    });
+    
+    
+
+    this.srvM
+      .obtenerMenusPorTipoUsuario(this.tipo_usuario_id)
+      .subscribe((res: any) => {
+        this.ListaMenus = res.menus;
+        console.log(this.ListaMenus);
+        
+      });
   }
 
   navigateTo(page: string) {

@@ -27,6 +27,15 @@ const routes: Routes = [
     path: 'categorias',
     loadChildren: () => import('./paginas/categorias/categorias.module').then( m => m.CategoriasPageModule)
   },
+  {
+    path: 'usuarios',
+    loadChildren: () => import('./paginas/usuarios/usuarios.module').then( m => m.UsuariosPageModule)
+  },
+  {
+    path: 'gastos',
+    loadChildren: () => import('./paginas/gastos/gastos.module').then( m => m.GastosPageModule)
+  },
+  
 ];
 
 @NgModule({

@@ -2,6 +2,7 @@ import { IngresoService } from 'src/app/servicios/ingreso.service';
 import { GeneralService } from './../../servicios/general.service';
 import { Component, OnInit } from '@angular/core';
 import { LoadingController, ToastController } from '@ionic/angular';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -16,7 +17,8 @@ export class LoginPage implements OnInit {
     private srvG: GeneralService,
     private SrvI: IngresoService,
     private loading: LoadingController,
-    private toast : ToastController
+    private toast : ToastController,
+    private router: Router
   ) {}
 
   ngOnInit() {}
@@ -59,7 +61,7 @@ export class LoginPage implements OnInit {
           JSON.stringify(usuarioLogueado)
         );
 
-        this.srvG.irA('/principal');
+        this.router.navigate(['/principal']);
         loading.dismiss();
       } else {
         //  this.srvG.fun_Mensaje('Error al iniciar sesión');

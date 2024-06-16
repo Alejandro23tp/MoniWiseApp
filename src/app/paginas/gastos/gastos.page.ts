@@ -22,6 +22,8 @@ export class GastosPage implements OnInit {
 
   mostrarFormulario: boolean = false; // Nueva propiedad
 
+  listaCategoriasPredefinidas: any[] = [];
+
   constructor(
     private srvGastos: GastosService,
     private srvGeneral: GeneralService
@@ -31,12 +33,14 @@ export class GastosPage implements OnInit {
     this.cargarUsuario();
     this.cargarFrecuencias();
     this.verificarSueldoFijo();
+    this.cargarCategoriasPredefinidas();
   }
 
   ionViewWillEnter() {
     this.cargarUsuario();
     this.cargarFrecuencias();
     this.verificarSueldoFijo();
+    this.cargarCategoriasPredefinidas();
   }
 
   cargarUsuario() {
@@ -88,6 +92,14 @@ export class GastosPage implements OnInit {
       } else {
         this.srvGeneral.fun_Mensaje(res.mensaje, 'danger');
       }
+    });
+  }
+
+  cargarCategoriasPredefinidas() {
+    this.srvGastos.verCategoriasPredefinidas().subscribe((res: any) => {
+      this.listaCategoriasPredefinidas = res.data;
+      console.log(this.listaCategoriasPredefinidas);
+      
     });
   }
 

@@ -43,4 +43,19 @@ export class GastosService {
     let url = 'verCategoriasPredefinidas';
     return this.http.get<any>(this.srvG.URLAPI + url);
   }
+
+  registrarCategoria(ObjetoCategoria: any) {
+   
+    let url = 'registrarCategoria';
+    return this.http.post<any>(
+      this.srvG.URLAPI + url,
+      this.srvG.objectToFormData({
+        nombre: ObjetoCategoria.nombre,
+        descripcion: ObjetoCategoria.descripcion,
+        usuario_id: ObjetoCategoria.usuario_id,
+        estado: ObjetoCategoria.estado,
+      })
+    );
+  }
+
 }

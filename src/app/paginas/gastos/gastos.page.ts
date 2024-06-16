@@ -24,6 +24,13 @@ export class GastosPage implements OnInit {
 
   listaCategoriasPredefinidas: any[] = [];
 
+
+  categoria_nombre: string = '';
+  categoria_descripcion: string = '';
+
+  categoria_estado: number = 1;
+  categoria_id: number = 0;
+
   constructor(
     private srvGastos: GastosService,
     private srvGeneral: GeneralService
@@ -95,13 +102,7 @@ export class GastosPage implements OnInit {
     });
   }
 
-  cargarCategoriasPredefinidas() {
-    this.srvGastos.verCategoriasPredefinidas().subscribe((res: any) => {
-      this.listaCategoriasPredefinidas = res.data;
-      console.log(this.listaCategoriasPredefinidas);
-      
-    });
-  }
+  
 
   actualizarFechaFinal() {
     if (this.sueldoFijo_fecha_inicio && this.sueldoFijo_frecuencia_id) {
@@ -132,5 +133,44 @@ export class GastosPage implements OnInit {
 
   ocultarFormularioRegistro() {
     this.mostrarFormulario = false; // Ocultar formulario de registro
+  }
+
+
+  cargarCategoriasPredefinidas() {
+    this.srvGastos.verCategoriasPredefinidas().subscribe((res: any) => {
+      this.listaCategoriasPredefinidas = res.data;
+      console.log(this.listaCategoriasPredefinidas);
+      
+    });
+  }
+
+  registrarCategoria() {
+    let ObjetoCategoria = {
+      nombre: this.categoria_nombre,
+      descripcion: this.categoria_descripcion,
+      usuario_id: this.sueldoFijo_usuario_id,
+      estado: this.categoria_estado,
+    };
+    console.log(ObjetoCategoria);
+    this.srvGastos.registrarCategoria(ObjetoCategoria).subscribe((res: any) => {
+      if (res.retorno == 1) {
+        this.srvGeneral.fun_Mensaje(res.mensaje, 'success');
+    
+      } else {
+        this.srvGeneral.fun_Mensaje(res.mensaje, 'danger');
+      }
+    });
+  }
+
+
+  onCategoriaChange(event: any) {
+    const categoriaSeleccionada = this.listaCategoriasPredefinidas.find(c => c.id === event.detail.value);
+    if (categoriaSeleccionada) {
+      this.categoria_nombre = categoriaSeleccionada.nombre;
+      this.categoria_descripcion = '';
+    } else {
+      this.categoria_nombre = '';
+      this.categoria_descripcion = '';
+    }
   }
 }

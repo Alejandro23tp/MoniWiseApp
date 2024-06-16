@@ -1,13 +1,122 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>register</ion-title>
+  <ion-toolbar color="tertiary">
+    <ion-title>Registrarse</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/login"></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button (click)="registrarUsuario()">
+        <ion-icon name="save"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
+ 
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">register</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content>
+  <!----Seleccionar tipo de usuario-->
+  <ion-grid fixed>
+    <ion-row justify-content-center>
+      <ion-col size="12" size-md="8" size-lg="6">
+        <ion-item color="primary" lines="inset">
+          <ion-label><h1>Activo</h1></ion-label>
+          <ion-toggle
+            mode="ios"
+            color="success"
+            [(ngModel)]="usuario_estado"
+            slot="end"
+          ></ion-toggle>
+        </ion-item>
+
+        <ion-card>
+          <ion-card-content>
+            <ion-card-title
+            position="stacked" color="tertiary"
+            >Tipo de usuario</ion-card-title>
+            <ion-select
+              interface="popover"
+              placeholder="Seleccione tipo de usuario"
+              [(ngModel)]="id_tipo_usuario"
+            >
+              <ion-select-option
+                *ngFor="let tipo of lista_tipo_usuario"
+                [value]="tipo.id"
+                color="tertiary"
+                >{{ tipo.tipo }}</ion-select-option
+              >
+            </ion-select>
+          </ion-card-content>
+        </ion-card>
+
+        <ion-item lines="inset" mode="ios">
+          <ion-label position="stacked" color="tertiary">Nombre</ion-label>
+          <ion-input
+            type="text"
+            [(ngModel)]="usuario_nombre"
+            clear-input
+            placeholder="Ingrese su nombre"
+          >
+          </ion-input>
+        </ion-item>
+
+        <ion-item lines="inset" mode="ios">
+          <ion-label position="stacked" color="tertiary">Cedula</ion-label>
+          <ion-input
+            type="text"
+            [(ngModel)]="usuario_cedula"
+            clear-input
+            placeholder="Ingrese su cedula"
+          >
+          </ion-input>
+        </ion-item>
+
+        <ion-item lines="inset" mode="ios">
+          <ion-label position="stacked" color="tertiary">Telefono</ion-label>
+          <ion-input
+            type="text"
+            [(ngModel)]="usuario_telefono"
+            clear-input
+            placeholder="Ingrese su telefono"
+          >
+          </ion-input>
+        </ion-item>
+
+        <ion-item lines="inset" mode="ios">
+          <ion-label position="stacked" color="tertiary">Correo</ion-label>
+          <ion-input
+            type="text"
+            [(ngModel)]="usuario_correo"
+            clear-input
+            placeholder="Ingrese su correo"
+          >
+          </ion-input>
+        </ion-item>
+
+        <ion-item lines="inset" mode="ios">
+          <ion-label position="stacked" color="tertiary">Usuario</ion-label>
+          <ion-input
+            type="text"
+            [(ngModel)]="usuario_usuario"
+            clear-input
+            placeholder="Ingrese su usuario"
+          >
+          </ion-input>
+        </ion-item>
+
+        <ion-item lines="inset" mode="ios">
+          <ion-label position="stacked" color="tertiary">Clave</ion-label>
+          <ion-input
+            type="password"
+            [(ngModel)]="usuario_clave"
+            clear-input
+            placeholder="Ingrese su clave"
+          >
+          </ion-input>
+        </ion-item>
+
+        
+        
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>

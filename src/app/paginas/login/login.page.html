@@ -32,11 +32,11 @@
       <ion-input
         type="text"
         name="username"
-        [(ngModel)]="username"
+        [(ngModel)]="usuario"
         required
       ></ion-input>
     </ion-item>
-    <div *ngIf="loginForm.submitted && !username" class="error-message">
+    <div *ngIf="loginForm.submitted && !usuario" class="error-message">
       Usuario es requerido
     </div>
 
@@ -46,7 +46,7 @@
       <ion-input
         type="password"
         name="password"
-        [(ngModel)]="password"
+        [(ngModel)]="clave"
         required
       ></ion-input>
       
@@ -56,7 +56,7 @@
       >¿Olvidaste tu contraseña?</ion-label
     >
     </div>
-    <div *ngIf="loginForm.submitted && !password" class="error-message">
+    <div *ngIf="loginForm.submitted && !clave" class="error-message">
       Contraseña es requerida
     </div>
 

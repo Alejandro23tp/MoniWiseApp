@@ -1,5 +1,7 @@
+import { IngresoService } from 'src/app/servicios/ingreso.service';
 import { GeneralService } from './../../servicios/general.service';
 import { Component, OnInit } from '@angular/core';
+import { LoadingController } from '@ionic/angular';
 
 @Component({
   selector: 'app-login',
@@ -7,41 +9,69 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
-  username: string = '';
-  password: string = '';
+  usuario: string = '';
+  clave: string = '';
 
   constructor(
-    private GeneralService: GeneralService
-  ) { }
+    private srvG: GeneralService,
+    private SrvI: IngresoService,
+    private loading: LoadingController
+  ) {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
-  onSubmit() {
-    this.username = this.username.trim();
-    this.password = this.password.trim();
-    if (this.username && this.password) {
-      this.GeneralService.irA('/principal');
-     
+  async onSubmit() {
+    const loading = await this.loading.create({
+      message: 'Iniciando sesión...',
+      spinner: 'bubbles',
+    });
+
+    if (this.usuario.trim() == '') {
+      return;
     }
-   
+
+    if (this.clave.trim() == '') {
+      return;
+    }
+    loading.present();
+    this.SrvI.login({
+      usuario: this.usuario,
+      contraseña: this.clave,
+    }).subscribe((res: any) => {
+      if (res.retorno == '1') {
+        this.srvG.fun_Mensaje(res.mensaje, 'primary');
+        //Tomar los datos del usuario logueado y guardarlos en localStorage
+        const id = res.usuario_id;
+        const nombreUsuario = res.usuario_nombre;
+        const estado = res.usuario_activo;
+        //mandar en json el usuario logueado
+        const usuarioLogueado = {
+          id: id,
+          nombre: nombreUsuario,
+          usuario: this.usuario,
+          contraseña: this.clave,
+          estado: estado,
+        };
+        localStorage.setItem(
+          'usuarioLogueado',
+          JSON.stringify(usuarioLogueado)
+        );
+
+        this.srvG.irA('/principal');
+        loading.dismiss();
+      } else {
+        //  this.srvG.fun_Mensaje('Error al iniciar sesión');
+        this.srvG.fun_Mensaje(res.mensaje, 'danger');
+        loading.dismiss();
+      }
+    });
   }
 
   goToRegister() {
-    this.GeneralService.irA('/register');
-
-
+    this.srvG.irA('/register');
   }
 
   goToForgotPassword() {
-    this.GeneralService.irA('/forgot');
-
-  }
-
-
-  goToLogin() {
-    console.log('go to login');
-    this.GeneralService.irA('/principal');
-    
+    this.srvG.irA('/forgot');
   }
 }

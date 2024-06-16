@@ -1,13 +1,59 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>forgot</ion-title>
+<ion-header>
+  <ion-toolbar color="tertiary">
+    <ion-title>Recuperar Contraseña</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="login"></ion-back-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">forgot</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class=" ion-text-center">
+  <ion-card mode="ios">
+
+     <!-- Logo -->
+     <img
+     src="assets/img/iconapp2.png"
+     alt="logo"
+     class="ion-margin-bottom"
+     class="logo"
+   />
+   <ion-text color="tertiary">
+     <h1><strong>
+         MoniWise
+       </strong>
+       App
+     </h1>
+   </ion-text>
+
+   
+  </ion-card>
+
+  <ion-card>
+    <ion-card-content>
+      <ion-item lines="inset" mode="ios">
+        <ion-label position="stacked" color="tertiary">Usuario</ion-label>
+        <ion-input
+          type="text"
+          [(ngModel)]="usuario"
+          clear-input
+          placeholder="Ingrese su usuario"
+        ></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked" color="tertiary">Clave</ion-label>
+        <ion-input
+          type="password"
+          [(ngModel)]="clave"
+          clear-input
+          placeholder="Ingrese su clave"
+        ></ion-input>
+      </ion-item>
+
+      <ion-button expand="block" (click)="recuperarClave()" color="tertiary"
+        >Recuperar Clave</ion-button
+      >
+    </ion-card-content>
+    
+  </ion-card>
 </ion-content>

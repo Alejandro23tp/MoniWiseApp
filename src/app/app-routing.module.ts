@@ -20,12 +20,12 @@ const routes: Routes = [
     loadChildren: () => import('./paginas/register/register.module').then( m => m.RegisterPageModule)
   },
   {
-    path: 'create',
-    loadChildren: () => import('./paginas/create/create.module').then( m => m.CreatePageModule)
-  },
-  {
     path: 'forgot',
     loadChildren: () => import('./paginas/forgot/forgot.module').then( m => m.ForgotPageModule)
+  },
+  {
+    path: 'categorias',
+    loadChildren: () => import('./paginas/categorias/categorias.module').then( m => m.CategoriasPageModule)
   },
 ];
 

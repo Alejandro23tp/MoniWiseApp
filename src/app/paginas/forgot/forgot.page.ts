@@ -17,6 +17,17 @@ export class ForgotPage implements OnInit {
     private SrvI : IngresoService,
     private loading : LoadingController,
   ) { }
+  handleRefresh(event: any) {
+    setTimeout(() => {
+     
+      
+      event.target.complete();
+      //recargar pagina
+
+      
+      
+    }, 2000);
+  }
 
   ngOnInit() {
   }

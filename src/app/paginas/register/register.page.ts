@@ -26,6 +26,8 @@ export class RegisterPage implements OnInit {
     private loadig: LoadingController
   ) {}
 
+  
+
   ngOnInit() {
     this.IngresoService.verTiposUsuario().subscribe((res: any) => {
       this.lista_tipo_usuario = res.data;

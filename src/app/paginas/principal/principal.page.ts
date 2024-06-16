@@ -12,4 +12,13 @@ export class PrincipalPage implements OnInit {
   ngOnInit() {
   }
 
+
+  handleRefresh(event: any) {
+    setTimeout(() => {
+     
+      
+      event.target.complete();
+      
+    }, 2000);
+  }
 }

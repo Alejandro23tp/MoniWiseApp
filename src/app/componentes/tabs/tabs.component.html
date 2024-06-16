@@ -1,0 +1,10 @@
+<!-- tabs.component.html -->
+
+<ion-tabs>
+  <ion-tab-bar slot="bottom" color="tertiary">
+    <ion-tab-button *ngFor="let menu of ListaMenus" (click)="navigateTo(menu.pagina)">
+      <ion-icon [name]="menu.icono"></ion-icon>
+      <ion-label>{{ menu.nombre }}</ion-label>
+    </ion-tab-button>
+  </ion-tab-bar>
+</ion-tabs>

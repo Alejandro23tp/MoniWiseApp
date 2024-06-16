@@ -27,16 +27,15 @@
             slot="end"
             [enableOnOffLabels]="true"
           ></ion-toggle>
-          
         </ion-item>
 
-        <ion-card mode="ios">
+        <ion-card>
           <ion-card-content>
-            <ion-card-title position="stacked" color="tertiary"
+            <ion-card-title position="stacked" color="tertiary" mode="ios"
               >Tipo de usuario</ion-card-title
             >
             <ion-select
-              interface="action-sheet"
+              interface="popover"
               placeholder="Seleccione tipo de usuario"
               [(ngModel)]="id_tipo_usuario"
             >

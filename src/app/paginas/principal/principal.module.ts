@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { PrincipalPageRoutingModule } from './principal-routing.module';
 
 import { PrincipalPage } from './principal.page';
+import { ComponentesModule } from 'src/app/componentes/componentes.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    PrincipalPageRoutingModule
+    PrincipalPageRoutingModule,
+    ComponentesModule
   ],
   declarations: [PrincipalPage]
 })

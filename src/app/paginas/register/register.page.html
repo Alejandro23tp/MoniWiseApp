@@ -10,7 +10,6 @@
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
- 
 </ion-header>
 
 <ion-content>
@@ -18,23 +17,26 @@
   <ion-grid fixed>
     <ion-row justify-content-center>
       <ion-col size="12" size-md="8" size-lg="6">
-        <ion-item color="primary" lines="inset">
+        <ion-item color="primary" lines="inset" mode="ios">
           <ion-label><h1>Activo</h1></ion-label>
+          <!----Si el estado es inactivo, el toggle es de colot tertiary si es activo el toggle es de color success-->
           <ion-toggle
             mode="ios"
             color="success"
             [(ngModel)]="usuario_estado"
             slot="end"
+            [enableOnOffLabels]="true"
           ></ion-toggle>
+          
         </ion-item>
 
-        <ion-card>
+        <ion-card mode="ios">
           <ion-card-content>
-            <ion-card-title
-            position="stacked" color="tertiary"
-            >Tipo de usuario</ion-card-title>
+            <ion-card-title position="stacked" color="tertiary"
+              >Tipo de usuario</ion-card-title
+            >
             <ion-select
-              interface="popover"
+              interface="action-sheet"
               placeholder="Seleccione tipo de usuario"
               [(ngModel)]="id_tipo_usuario"
             >
@@ -113,9 +115,6 @@
           >
           </ion-input>
         </ion-item>
-
-        
-        
       </ion-col>
     </ion-row>
   </ion-grid>

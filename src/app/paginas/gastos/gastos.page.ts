@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ModalController } from '@ionic/angular';
+import { ModalcontentComponent } from 'src/app/componentes/modalcontent/modalcontent.component';
 import { GastosService } from 'src/app/servicios/gastos.service';
 import { GeneralService } from 'src/app/servicios/general.service';
 
@@ -20,10 +22,13 @@ export class GastosPage implements OnInit {
   sueldoFijo: string = '';
   existeSueldoFijo: boolean = false;
 
+  listaSueldoFijos: any[] = [];
+
   mostrarFormulario: boolean = false; // Nueva propiedad
+  modalContent: string = '';
 
   listaCategoriasPredefinidas: any[] = [];
-
+  listaCategoriasPorId: any[] = [];
 
   categoria_nombre: string = '';
   categoria_descripcion: string = '';
@@ -31,9 +36,40 @@ export class GastosPage implements OnInit {
   categoria_estado: number = 1;
   categoria_id: number = 0;
 
+  nombreUsuario: string = '';
+
+  async presentModal(contentType: string) {
+    this.modalContent = contentType;
+    const modal = await this.modalController.create({
+      component: ModalcontentComponent, 
+      breakpoints: [0.25],
+      initialBreakpoint: 0.25,// Asegúrate de definir ModalContentComponent
+      //Los componentProps son los que se pasan a la vista del componente modal
+      componentProps: { 
+        modalContent: this.modalContent,
+        nombreUsuario: this.nombreUsuario,
+        listaCategoriasPorId: this.listaCategoriasPorId,
+        listaSueldoFijos: this.listaSueldoFijos
+      }
+    });
+    return await modal.present();
+  }
+
+  openCategoriaModal() {
+    this.presentModal('categoria');
+  }
+
+  openSueldoFijoModal() {
+    this.presentModal('sueldoFijo');
+  }
+
+  closeModal(modal : any) {
+    modal.dismiss();
+  }
   constructor(
     private srvGastos: GastosService,
-    private srvGeneral: GeneralService
+    private srvGeneral: GeneralService,
+    private modalController: ModalController
   ) {}
 
   ngOnInit() {
@@ -41,13 +77,15 @@ export class GastosPage implements OnInit {
     this.cargarFrecuencias();
     this.verificarSueldoFijo();
     this.cargarCategoriasPredefinidas();
+    this.cargarCategoriaPorId();
   }
 
   ionViewWillEnter() {
     this.cargarUsuario();
     this.cargarFrecuencias();
-    this.verificarSueldoFijo();
+   
     this.cargarCategoriasPredefinidas();
+   
   }
 
   cargarUsuario() {
@@ -55,9 +93,11 @@ export class GastosPage implements OnInit {
     const usuarioLogueado = localStorage.getItem('usuarioLogueado');
     if (usuarioLogueado != null) {
       const usuarioLogueadoObj = JSON.parse(usuarioLogueado).id;
-
+      const usuarioLogueadoObj2 = JSON.parse(usuarioLogueado).nombre;
       this.sueldoFijo_usuario_id = usuarioLogueadoObj;
+      this.nombreUsuario = usuarioLogueadoObj2;
       console.log('usuario_id: ' + this.sueldoFijo_usuario_id);
+      console.log('usuario_nombre: ' + this.nombreUsuario);
     }
   }
 
@@ -72,14 +112,21 @@ export class GastosPage implements OnInit {
     if (usuarioLogueado != null) {
       const usuarioLogueadoObj = JSON.parse(usuarioLogueado).id;
       this.sueldoFijo_usuario_id = usuarioLogueadoObj;
-      this.srvGastos.verSueldoFijoPorUsuario(this.sueldoFijo_usuario_id).subscribe((res: any) => {
-        if (res.data.length > 0) {
-          this.sueldoFijo = res.data[0].monto;
-          this.existeSueldoFijo = true;
-        } else {
-          this.existeSueldoFijo = false;
-        }
-      });
+      this.srvGastos
+        .verSueldoFijoPorUsuario(this.sueldoFijo_usuario_id)
+        .subscribe((res: any) => {
+          if (res.data.length > 0) {
+            this.sueldoFijo = res.data[0].monto;
+            //recorrer res.data desde [0] hasta el ultimo con forEach
+            res.data.forEach((sueldoFijo: any) => {
+              this.listaSueldoFijos.push(sueldoFijo);
+            });
+            console.log('Sus Lista Sueldo Fijos: ' ,this.listaSueldoFijos);
+            this.existeSueldoFijo = true;
+          } else {
+            this.existeSueldoFijo = false;
+          }
+        });
     }
   }
 
@@ -92,17 +139,17 @@ export class GastosPage implements OnInit {
       usuario_id: this.sueldoFijo_usuario_id,
       estado: this.sueldoFijo_estado,
     };
-    this.srvGastos.registrarSueldoFijo(ObjetoSueldoFijo).subscribe((res: any) => {
-      if (res.retorno == 1) {
-        this.srvGeneral.fun_Mensaje(res.mensaje, 'success');
-        this.verificarSueldoFijo();  // Verificar de nuevo si el sueldo fijo ya está registrado
-      } else {
-        this.srvGeneral.fun_Mensaje(res.mensaje, 'danger');
-      }
-    });
+    this.srvGastos
+      .registrarSueldoFijo(ObjetoSueldoFijo)
+      .subscribe((res: any) => {
+        if (res.retorno == 1) {
+          this.srvGeneral.fun_Mensaje(res.mensaje, 'success');
+          this.verificarSueldoFijo(); // Verificar de nuevo si el sueldo fijo ya está registrado
+        } else {
+          this.srvGeneral.fun_Mensaje(res.mensaje, 'danger');
+        }
+      });
   }
-
-  
 
   actualizarFechaFinal() {
     if (this.sueldoFijo_fecha_inicio && this.sueldoFijo_frecuencia_id) {
@@ -135,12 +182,10 @@ export class GastosPage implements OnInit {
     this.mostrarFormulario = false; // Ocultar formulario de registro
   }
 
-
   cargarCategoriasPredefinidas() {
     this.srvGastos.verCategoriasPredefinidas().subscribe((res: any) => {
       this.listaCategoriasPredefinidas = res.data;
       console.log(this.listaCategoriasPredefinidas);
-      
     });
   }
 
@@ -155,16 +200,31 @@ export class GastosPage implements OnInit {
     this.srvGastos.registrarCategoria(ObjetoCategoria).subscribe((res: any) => {
       if (res.retorno == 1) {
         this.srvGeneral.fun_Mensaje(res.mensaje, 'success');
-    
       } else {
         this.srvGeneral.fun_Mensaje(res.mensaje, 'danger');
       }
     });
   }
 
+  cargarCategoriaPorId() {
+    this.srvGastos
+      .verCategoriaPorId(this.sueldoFijo_usuario_id)
+      .subscribe((res: any) => {
+        if (res.data.length > 0) {
+          //recorrer res.data desde [0] hasta el ultimo con forEach
+          res.data.forEach((categoria: any) => {
+            this.listaCategoriasPorId.push(categoria);
+          });
+          console.log('Sus Lista Categorias: ' ,this.listaCategoriasPorId);
+         
+        } 
+      });
+  }
 
   onCategoriaChange(event: any) {
-    const categoriaSeleccionada = this.listaCategoriasPredefinidas.find(c => c.id === event.detail.value);
+    const categoriaSeleccionada = this.listaCategoriasPredefinidas.find(
+      (c) => c.id === event.detail.value
+    );
     if (categoriaSeleccionada) {
       this.categoria_nombre = categoriaSeleccionada.nombre;
       this.categoria_descripcion = '';

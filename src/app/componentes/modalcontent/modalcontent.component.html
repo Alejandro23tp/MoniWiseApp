@@ -1,0 +1,29 @@
+<ion-header>
+  <ion-toolbar color="tertiary">
+    <ion-title *ngIf="modalContent === 'categoria'">Categoría de {{ nombreUsuario }}</ion-title>
+    <ion-title *ngIf="modalContent === 'sueldoFijo'">Sueldo Fijo de {{ nombreUsuario }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button color="light" (click)="dismiss()">Close</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content mode="ios">
+  <ion-list *ngIf="modalContent === 'categoria'">
+    <ion-item *ngFor="let c of listaCategoriasPorId">
+      <ion-label>
+        <h2>{{ c.nombre }}</h2>
+        <p>{{ c.descripcion }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+  <ion-list *ngIf="modalContent === 'sueldoFijo'">
+    <ion-item *ngFor="let s of listaSueldoFijos">
+      <ion-label>
+        <h2>{{ s.monto }}</h2>
+        <p>{{ s.fecha_inicio }}</p>
+        <p>{{ s.fecha_final }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>
+

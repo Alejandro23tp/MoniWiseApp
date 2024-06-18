@@ -4,7 +4,7 @@
       <ion-button>
         <ion-icon slot="icon-only" name="notifications-outline"></ion-icon>
       </ion-button>
-      <ion-button id="open-modal">
+      <ion-button id="open-modal-p">
         <ion-icon slot="icon-only" name="person-circle-outline"></ion-icon>
       </ion-button>
       <ion-button (click)="confirmarSalir()">
@@ -23,7 +23,7 @@
 
 <ion-modal
   #modal
-  trigger="open-modal"
+  trigger="open-modal-p"
   [initialBreakpoint]="0.25"
   [breakpoints]="[0, 0.25, 0.5, 0.75]"
 >
@@ -123,9 +123,11 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   <!----Bienvenido al usuario -->
-  <ion-item>
-    <ion-label>Bienvenido {{ usuario_nombre }}</ion-label>
-  </ion-item>
+  <ion-card mode="ios">
+    <ion-card-title color="tertiary">Bienvenido </ion-card-title>
+    <ion-card-subtitle>{{ usuario_nombre }}</ion-card-subtitle>
+  </ion-card>
+ 
   <!----Bienvenido al usuario -->
 
   <ion-tabs>

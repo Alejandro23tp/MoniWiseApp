@@ -44,6 +44,16 @@ export class GastosService {
     return this.http.get<any>(this.srvG.URLAPI + url);
   }
 
+  verCategoriaPorId(id: number) {
+    let url = 'verCategoriaPorId';
+    return this.http.post(
+      this.srvG.URLAPI + url,
+      this.srvG.objectToFormData({
+        usuario_id: id,
+      })
+    );
+  }
+
   registrarCategoria(ObjetoCategoria: any) {
    
     let url = 'registrarCategoria';

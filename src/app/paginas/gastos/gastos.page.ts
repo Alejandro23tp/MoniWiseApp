@@ -38,6 +38,14 @@ export class GastosPage implements OnInit {
 
   nombreUsuario: string = '';
 
+  ingreso_fecha: string = '';
+  ingreso_monto: number = 0;
+  ingreso_descripcion: string = '';
+  ingreso_usuario_id: number = 0;
+  ingreso_estado: number = 1;
+
+  listaIngresos: any[] = [];
+
   async presentModal(contentType: string) {
     this.modalContent = contentType;
     const modal = await this.modalController.create({
@@ -78,6 +86,7 @@ export class GastosPage implements OnInit {
     this.verificarSueldoFijo();
     this.cargarCategoriasPredefinidas();
     this.cargarCategoriaPorId();
+    this.cargarIngresos();
   }
 
   ionViewWillEnter() {
@@ -149,6 +158,32 @@ export class GastosPage implements OnInit {
           this.srvGeneral.fun_Mensaje(res.mensaje, 'danger');
         }
       });
+  }
+
+  registrarIngresos(){
+    let ObjetoIngreso = {
+      fecha: this.ingreso_fecha,
+      monto: this.ingreso_monto,
+      descripcion: this.ingreso_descripcion,
+      usuario_id: this.sueldoFijo_usuario_id,
+      estado: this.ingreso_estado,
+    };
+    console.log(ObjetoIngreso);
+    this.srvGastos
+      .registrarIngresos(ObjetoIngreso)
+      .subscribe((res: any) => {
+        if (res.retorno == 1) {
+          this.srvGeneral.fun_Mensaje(res.mensaje, 'success');
+          //Limpiar campos de formulario
+          this.ingreso_fecha = '';
+          this.ingreso_monto = 0;
+          this.ingreso_descripcion = '';
+
+        } else {
+          this.srvGeneral.fun_Mensaje(res.mensaje, 'danger');
+        }
+      });
+    
   }
 
   actualizarFechaFinal() {
@@ -232,5 +267,19 @@ export class GastosPage implements OnInit {
       this.categoria_nombre = '';
       this.categoria_descripcion = '';
     }
+  }
+
+  cargarIngresos() {
+    this.srvGastos
+      .verIngresosUsuario(this.sueldoFijo_usuario_id)
+      .subscribe((res: any) => {
+        if (res.data.length > 0) {
+          //recorrer res.data desde [0] hasta el ultimo con forEach
+          res.data.forEach((ingreso: any) => {
+            this.listaIngresos.push(ingreso);
+          });
+          console.log('Sus Lista Ingresos: ' ,this.listaIngresos);
+        } 
+      });
   }
 }

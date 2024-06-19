@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { LoadingController, ModalController } from '@ionic/angular';
 import { ModalcontentComponent } from 'src/app/componentes/modalcontent/modalcontent.component';
 import { GeneralService } from 'src/app/servicios/general.service';
 import { RegistrosService } from 'src/app/servicios/registros.service';
@@ -78,7 +78,8 @@ export class RegistrosPage implements OnInit {
   constructor(
     private srvRegistro: RegistrosService,
     private srvGeneral: GeneralService,
-    private modalController: ModalController
+    private modalController: ModalController,
+    private loading : LoadingController
   ) {}
 
   ngOnInit() {
@@ -93,7 +94,7 @@ export class RegistrosPage implements OnInit {
   ionViewWillEnter() {
     this.cargarUsuario();
     this.cargarFrecuencias();
-   
+    this.cargarCategoriaPorId();
     this.cargarCategoriasPredefinidas();
    
   }
@@ -242,16 +243,24 @@ export class RegistrosPage implements OnInit {
     });
   }
 
-  cargarCategoriaPorId() {
+  async cargarCategoriaPorId() {
+    const loading = await this.loading.create({
+      message: 'Cargando...',
+    });
+    
+
     this.srvRegistro
       .verCategoriaPorId(this.sueldoFijo_usuario_id)
       .subscribe((res: any) => {
         if (res.data.length > 0) {
           //recorrer res.data desde [0] hasta el ultimo con forEach
+         
           res.data.forEach((categoria: any) => {
             this.listaCategoriasPorId.push(categoria);
+           
           });
           console.log('Sus Lista Categorias: ' ,this.listaCategoriasPorId);
+         
          
         } 
       });

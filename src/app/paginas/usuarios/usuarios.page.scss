@@ -1,0 +1,38 @@
+:host {
+    
+    
+    .header-row {
+      background-color: #3b3b3b; /* Fondo de cabecera */
+      border-bottom: 1px solid #7b65f9;
+      font-weight: bold;
+    }
+  
+    .header-cell {
+      text-align: center;
+      color: #fff; /* Color de texto blanco para cabecera */
+    }
+  
+    .data-row {
+      margin-top: 10px;
+    }
+  
+    .data-cell {
+      display: flex;
+      align-items: center;
+      color: #fff; /* Color de texto blanco para datos */
+    }
+  
+    ion-card {
+      --background: #2b2b2b; /* Fondo de la tarjeta */
+      color: #fff; /* Color de texto de la tarjeta */
+    }
+  
+    ion-card-content {
+      padding: 10px;
+    }
+  
+    ion-toggle {
+      margin-left: auto;
+    }
+  }
+  

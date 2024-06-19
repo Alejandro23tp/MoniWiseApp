@@ -1,0 +1,40 @@
+/* styles.scss o modalcontent.component.scss */
+
+.header-row {
+  background-color: #000000; /* Color de fondo para la fila de encabezados */
+  border-bottom: 1px solid #4e60e6; /* Borde inferior para separar los encabezados */
+  font-weight: bold; /* Texto en negrita para los encabezados */
+  text-align: justify; /* Alineación centrada del texto */
+  padding: 10px 0; /* Espaciado interior superior e inferior */
+}
+
+.data-row {
+  border-bottom: 1px solid #eee; /* Borde inferior para separar las filas de datos */
+  padding: 10px 0; /* Espaciado interior superior e inferior */
+}
+
+.header-cell {
+  padding: 0 5px; /* Espaciado interior izquierdo y derecho para las celdas de encabezado */
+}
+
+.data-cell {
+  padding: 0 5px; /* Espaciado interior izquierdo y derecho para las celdas de datos */
+  text-align: justify; /* Alineación centrada del texto */
+}
+
+ion-modal {
+  --height: 20%;
+  --border-radius: 16px;
+  --box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1),
+    0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+ion-modal::part(backdrop) {
+
+  opacity: 1;
+}
+
+ion-modal ion-toolbar {
+ 
+  --color: white;
+}

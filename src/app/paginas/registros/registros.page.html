@@ -1,0 +1,243 @@
+<app-header></app-header>
+
+<ion-content>
+  <ng-container
+    *ngIf="!existeSueldoFijo || mostrarFormulario; else sueldoFijoExistente"
+  >
+    <ion-card mode="ios" class="ion-margin-top">
+      <ion-list>
+        <ion-item>
+          <ion-label color="tertiary">Frecuencia</ion-label>
+          <ion-select
+            [(ngModel)]="sueldoFijo_frecuencia_id"
+            placeholder="Seleccionar Frecuencia"
+            interface="popover"
+            mode="md"
+            (ionChange)="actualizarFechaFinal()"
+          >
+            <ion-select-option
+              *ngFor="let frecuencia of listaFrecuencias"
+              [value]="frecuencia.id"
+            >
+              {{ frecuencia.frecuencia }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item lines="inset">
+          <ion-label position="floating">Monto</ion-label>
+          <ion-input [(ngModel)]="sueldoFijo_monto" type="number"></ion-input>
+        </ion-item>
+
+        <ion-grid fixed>
+          <ion-row>
+            <ion-col size="6">
+              <ion-item>
+                <ion-label position="stacked" color="tertiary"
+                  >Fecha Inicio</ion-label
+                >
+                <ion-input
+                  [(ngModel)]="sueldoFijo_fecha_inicio"
+                  type="date"
+                  (ionBlur)="actualizarFechaFinal()"
+                ></ion-input>
+              </ion-item>
+            </ion-col>
+            <ion-col size="6">
+              <ion-item>
+                <ion-label position="stacked" color="tertiary"
+                  >Fecha Final</ion-label
+                >
+                <ion-input
+                  [(ngModel)]="sueldoFijo_fecha_final"
+                  type="date"
+                  readonly
+                ></ion-input>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+
+        <ion-grid fixed>
+          <ion-row>
+            <ion-col size="7">
+              <ion-button
+                (click)="registrarSueldoFijo()"
+                color="tertiary"
+                expand="block"
+              >
+                <ion-icon slot="end" name="save"></ion-icon>
+                Registrar
+              </ion-button>
+            </ion-col>
+            <ion-col size="5">
+              <ion-button
+                color="tertiary"
+                expand="block"
+                (click)="openSueldoFijoModal()"
+              >
+                <ion-icon slot="end" name="eye"></ion-icon>
+                Ver
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+
+        <ion-button fill="clear" (click)="ocultarFormularioRegistro()">
+          <ion-icon slot="icon-only" name="remove-circle-outline"></ion-icon>
+        </ion-button>
+      </ion-list>
+    </ion-card>
+  </ng-container>
+  <ng-template #sueldoFijoExistente>
+    <ion-card class="ion-margin-top" mode="ios">
+      <ion-card-header>
+        <ion-card-subtitle color="dark" class="sueldo"
+          >{{ sueldoFijo }}</ion-card-subtitle
+        >
+        <ion-card-title color="tertiary">Su Sueldo Fijo es de</ion-card-title>
+      </ion-card-header>
+      <ion-buttons mode="ios" class="ion-justify-content-end">
+        <ion-button (click)="mostrarFormularioRegistro()">
+          <ion-icon name="add-circle-outline"></ion-icon>
+        </ion-button>
+        <ion-button (click)="ocultarFormularioRegistro()">
+          <ion-icon name="remove-circle-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-card>
+
+    <ion-card mode="ios">
+      <ion-card-header>
+        <ion-card-title color="tertiary"
+          >Seleccione Categoría Predefinida</ion-card-title
+        >
+      </ion-card-header>
+      <ion-item>
+        <ion-label>Categoría</ion-label>
+        <ion-select
+          interface="popover"
+          [(ngModel)]="categoria_id"
+          placeholder="Seleccionar Categoría"
+          (ionChange)="onCategoriaChange($event)"
+          mode="md"
+        >
+          <ion-select-option
+            *ngFor="let categoria of listaCategoriasPredefinidas"
+            [value]="categoria.id"
+          >
+            {{ categoria.nombre }}
+          </ion-select-option>
+          <ion-select-option [value]="0"
+            >Agregar Nueva Categoría</ion-select-option
+          >
+        </ion-select>
+      </ion-item>
+      <ion-item *ngIf="categoria_id === 0">
+        <ion-label position="floating">Nombre de la Categoría</ion-label>
+        <ion-input [(ngModel)]="categoria_nombre" type="text"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Descripción</ion-label>
+        <ion-input [(ngModel)]="categoria_descripcion" type="text"></ion-input>
+      </ion-item>
+      <ion-grid fixed>
+        <ion-row>
+          <ion-col size="7">
+            <ion-button
+              color="tertiary"
+              (click)="registrarCategoria()"
+              expand="block"
+            >
+              <ion-icon slot="end" name="save"></ion-icon>
+              Registrar
+            </ion-button>
+          </ion-col>
+          <ion-col size="5">
+            <ion-button
+              color="tertiary"
+              expand="block"
+              (click)="openCategoriaModal()"
+            >
+              <ion-icon slot="end" name="eye"></ion-icon>
+              Ver
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card>
+  </ng-template>
+
+  <ion-card mode="ios">
+    <!----Registro de Ingresos-->
+    <ion-card-header>
+      <ion-card-title color="tertiary">Registro de Ingresos</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-item>
+          <ion-label color="tertiary">Fecha</ion-label>
+          <ion-input [(ngModel)]="ingreso_fecha" type="date"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label color="tertiary">Monto</ion-label>
+          <ion-input [(ngModel)]="ingreso_monto" type="number"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label color="tertiary" position="floating"
+            >Descripción</ion-label
+          >
+          <ion-input [(ngModel)]="ingreso_descripcion" type="text"></ion-input>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+    <!----Botones de Registro de Ingresos-->
+    <ion-grid fixed>
+      <ion-row>
+        <ion-col size="7">
+          <ion-button
+            color="tertiary"
+            (click)="registrarIngresos()"
+            expand="block"
+          >
+            <ion-icon slot="end" name="save"></ion-icon>
+            Registrar
+          </ion-button>
+        </ion-col>
+        <ion-col size="5">
+          <ion-button color="tertiary" expand="block" id="open-modal-g">
+            <ion-icon slot="end" name="eye"></ion-icon>
+            Ver
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <app-tabs></app-tabs>
+  </ion-toolbar>
+</ion-footer>
+
+<ion-modal #modal trigger="open-modal-g">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar color="tertiary">
+        <ion-title>Lista de Ingresos</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <ion-list>
+        <ion-item *ngFor="let ingreso of listaIngresos">
+          <ion-label>
+            <p>Fecha: {{ingreso.fecha}}</p>
+            <p>Monto: {{ingreso.monto}}</p>
+            <p>Descripcion: {{ingreso.descripcion}}</p>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-content>
+  </ng-template>
+</ion-modal>

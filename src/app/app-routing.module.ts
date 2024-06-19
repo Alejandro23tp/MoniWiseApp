@@ -35,6 +35,11 @@ const routes: Routes = [
     path: 'gastos',
     loadChildren: () => import('./paginas/gastos/gastos.module').then( m => m.GastosPageModule)
   },
+  {
+    path: 'registros',
+    loadChildren: () => import('./paginas/registros/registros.module').then( m => m.RegistrosPageModule)
+  },
+ 
   
 ];
 

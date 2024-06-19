@@ -3,6 +3,7 @@ import { LoadingController, ModalController } from '@ionic/angular';
 import { CategoriasService } from 'src/app/servicios/categorias.service';
 import { GastosService } from 'src/app/servicios/gastos.service';
 import { GeneralService } from 'src/app/servicios/general.service';
+import { RegistrosService } from 'src/app/servicios/registros.service';
 
 @Component({
   selector: 'app-categorias',
@@ -17,7 +18,7 @@ export class CategoriasPage implements OnInit {
   categoria_nombre: string = '';
   constructor(
     private categoriasService: CategoriasService,
-    private srvGastos: GastosService,
+    private srvRegistro: RegistrosService,
     private srvGeneral: GeneralService,
     private modal: ModalController,
     private loading: LoadingController
@@ -35,7 +36,7 @@ export class CategoriasPage implements OnInit {
     });
     loading.present();
 
-    this.srvGastos.verCategoriasPredefinidas().subscribe((res: any) => {
+    this.srvRegistro.verCategoriasPredefinidas().subscribe((res: any) => {
       this.listaCategoriasPredefinidas = res.data;
       console.log(this.listaCategoriasPredefinidas);
       loading.dismiss();

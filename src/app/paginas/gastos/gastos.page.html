@@ -1,5 +1,23 @@
 <app-header></app-header>
 
+<ion-content>
+  <!----Ver Sueldo Fijo-->
+  <ion-card mode="ios" class="ion-margin-top">
+    <ion-card-content>
+    <ion-card-title color="tertiary">{{ usuario_nombre }}, usted cuenta con: </ion-card-title>
+    <ion-card-title color="dark" class="sueldo">{{ sueldoFijo }}$</ion-card-title>
+    </ion-card-content>
+
+    <ion-buttons >
+      <ion-button expand="block" color="tertiary">
+        <ion-icon slot="end" name="add-circle-outline"></ion-icon>
+        Desglose de Sueldo
+      </ion-button>
+    </ion-buttons>
+  </ion-card>
+
+ 
+</ion-content>
 
 <ion-footer>
   <ion-toolbar>

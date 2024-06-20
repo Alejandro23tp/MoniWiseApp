@@ -29,9 +29,21 @@ export class RegisterPage implements OnInit {
   
 
   ngOnInit() {
+    this.cargarTiposUsuario();
+
+   
+  }
+
+  async cargarTiposUsuario() {
+    const loading = await this.loadig.create({
+      message: 'Cargando tipos de usuario...',
+      duration: 3000,
+    });
+    loading.present();
     this.IngresoService.verTiposUsuario().subscribe((res: any) => {
       this.lista_tipo_usuario = res.data;
       console.log(this.lista_tipo_usuario);
+      loading.dismiss();
     });
   }
 

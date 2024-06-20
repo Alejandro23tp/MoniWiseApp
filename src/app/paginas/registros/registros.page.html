@@ -75,6 +75,7 @@
                 color="tertiary"
                 expand="block"
                 (click)="openSueldoFijoModal()"
+                (click)="verificarSueldoFijo()"
               >
                 <ion-icon slot="end" name="eye"></ion-icon>
                 Ver
@@ -120,6 +121,7 @@
           [(ngModel)]="categoria_id"
           placeholder="Seleccionar Categoría"
           (ionChange)="onCategoriaChange($event)"
+          
           mode="md"
         >
           <ion-select-option
@@ -158,6 +160,7 @@
               color="tertiary"
               expand="block"
               (click)="openCategoriaModal()"
+              (click)="cargarCategoriaPorId()"
             >
               <ion-icon slot="end" name="eye"></ion-icon>
               Ver
@@ -205,13 +208,14 @@
           </ion-button>
         </ion-col>
         <ion-col size="5">
-          <ion-button color="tertiary" expand="block" id="open-modal-g">
+          <ion-button color="tertiary" expand="block" id="open-modal-g" (click)="cargarIngresos()">
             <ion-icon slot="end" name="eye"></ion-icon>
             Ver
           </ion-button>
         </ion-col>
       </ion-row>
     </ion-grid>
+    
   </ion-card>
 </ion-content>
 

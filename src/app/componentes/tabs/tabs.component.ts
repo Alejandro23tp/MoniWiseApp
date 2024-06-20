@@ -30,20 +30,24 @@ export class TabsComponent implements OnInit {
     this.obtenerMenusPorTipoUsuario();
   }
 
-  obtenerMenusPorTipoUsuario() {
-    
-    
+  async obtenerMenusPorTipoUsuario() {
+    const loadin = await this.loadig.create({
+      message: 'Obteniendo menus...',
+      duration: 3000,
+    });
+    loadin.present();
 
     this.srvM
       .obtenerMenusPorTipoUsuario(this.tipo_usuario_id)
       .subscribe((res: any) => {
         this.ListaMenus = res.menus;
         console.log(this.ListaMenus);
-        
+        loadin.dismiss();
       });
   }
 
   navigateTo(page: string) {
     this.router.navigate([page]);
+    this.obtenerMenusPorTipoUsuario();
   }
 }

@@ -86,7 +86,7 @@ export class RegistrosPage implements OnInit {
     this.cargarFrecuencias();
     this.verificarSueldoFijo();
     this.cargarCategoriasPredefinidas();
-   // this.cargarCategoriaPorId();
+    // this.cargarCategoriaPorId();
   }
 
   ionViewWillEnter() {
@@ -115,7 +115,34 @@ export class RegistrosPage implements OnInit {
     });
   }
 
- 
+  verificarSueldoFijo() {
+    const usuarioLogueado = localStorage.getItem('usuarioLogueado');
+    if (usuarioLogueado != null) {
+      const usuarioLogueadoObj = JSON.parse(usuarioLogueado).id;
+      this.sueldoFijo_usuario_id = usuarioLogueadoObj;
+      this.srvRegistro
+        .verSueldoFijoPorUsuario(this.sueldoFijo_usuario_id)
+        .subscribe((res: any) => {
+          if (res.data.length > 0) {
+            this.sueldoFijo = res.data[0].monto;
+            //recorrer res.data desde [0] hasta el ultimo con for of
+            for (let i = 0; i < res.data.length; i++) {
+              //si lista de sueldo fijos no tiene datos, ejecuta el push caso contrario
+              if (this.listaSueldoFijos.length == 0) {
+                this.listaSueldoFijos.push(res.data[i]);
+              } else {
+                //this.listaSueldoFijos.push(res.data[i]);
+              }
+            }
+
+            console.log('Sus Lista Sueldo Fijos: ', this.listaSueldoFijos);
+            this.existeSueldoFijo = true;
+          } else {
+            this.existeSueldoFijo = false;
+          }
+        });
+    }
+  }
 
   registrarSueldoFijo() {
     let ObjetoSueldoFijo = {
@@ -217,34 +244,6 @@ export class RegistrosPage implements OnInit {
       });
   }
 
-  verificarSueldoFijo() {
-    const usuarioLogueado = localStorage.getItem('usuarioLogueado');
-    if (usuarioLogueado != null) {
-      const usuarioLogueadoObj = JSON.parse(usuarioLogueado).id;
-      this.sueldoFijo_usuario_id = usuarioLogueadoObj;
-      this.srvRegistro
-        .verSueldoFijoPorUsuario(this.sueldoFijo_usuario_id)
-        .subscribe((res: any) => {
-          if (res.data.length > 0) {
-            this.sueldoFijo = res.data[0].monto;
-            //recorrer res.data desde [0] hasta el ultimo con for of
-            for (let i = 0; i < res.data.length; i++) {
-              //si lista de sueldo fijos no tiene datos, ejecuta el push caso contrario
-              if (this.listaSueldoFijos.length == 0) {
-                this.listaSueldoFijos.push(res.data[i]);
-              } else {
-                //this.listaSueldoFijos.push(res.data[i]);
-              }
-            }
-            
-            console.log('Sus Lista Sueldo Fijos: ', this.listaSueldoFijos);
-            this.existeSueldoFijo = true;
-          } else {
-            this.existeSueldoFijo = false;
-          }
-        });
-    }
-  }
   async cargarCategoriaPorId() {
     const loading = await this.loading.create({
       message: 'Cargando...',
@@ -258,14 +257,17 @@ export class RegistrosPage implements OnInit {
     this.srvRegistro
       .verCategoriaPorId(this.sueldoFijo_usuario_id)
       .subscribe((res: any) => {
-        for (let i = 0; i < res.data.length; i++) {
+        if (res.data.length > 0) {
+          //recorrer res.data desde [0] hasta el ultimo con forEach
+
           if (this.listaCategoriasPorId.length == 0) {
-            this.listaCategoriasPorId.push(res.data[i]);
-          } else {
-            //this.listaCategoriasPorId.push(res.data[i]);
+            res.data.forEach((categoria: any) => {
+              this.listaCategoriasPorId.push(categoria);
+            });
           }
+
+          console.log('Sus Lista Categorias: ', this.listaCategoriasPorId);
         }
-        loading.dismiss();
       });
   }
 
@@ -285,7 +287,7 @@ export class RegistrosPage implements OnInit {
   async cargarIngresos() {
     const loading = await this.loading.create({
       message: 'Cargando ingresos...',
-      spinner: 'bubbles'
+      spinner: 'bubbles',
     });
     loading.present();
     this.srvRegistro
@@ -293,11 +295,14 @@ export class RegistrosPage implements OnInit {
       .subscribe((res: any) => {
         if (res.data.length > 0) {
           //recorrer res.data desde [0] hasta el ultimo con forEach
-          res.data.forEach((ingreso: any) => {
-            this.listaIngresos.push(ingreso);
-          
-            loading.dismiss();
-          });
+          if (this.listaIngresos.length == 0) {
+            res.data.forEach((ingreso: any) => {
+              this.listaIngresos.push(ingreso);
+              
+            });
+           
+          }
+          loading.dismiss();
           console.log('Sus Lista Ingresos: ', this.listaIngresos);
         }
       });

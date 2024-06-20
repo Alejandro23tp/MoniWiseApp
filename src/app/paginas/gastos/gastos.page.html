@@ -8,14 +8,28 @@
     <ion-card-title color="dark" class="sueldo">{{ sueldoFijo }}$</ion-card-title>
     </ion-card-content>
 
-    <ion-buttons >
-      <ion-button expand="block" color="tertiary">
-        <ion-icon slot="end" name="add-circle-outline"></ion-icon>
-        Desglose de Sueldo
-      </ion-button>
-    </ion-buttons>
+   
   </ion-card>
 
+ 
+  <ion-segment [(ngModel)]="segmento" >
+    <ion-segment-button  value="desglosar">
+      <ion-label>Desglosar sueldo</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="listar">
+      <ion-label>Lista Gastos</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+ 
+  <div *ngIf="segmento==='desglosar'">
+  <ion-label>Label</ion-label>
+  </div>
+
+  <div
+    *ngIf="segmento==='listar'"
+  >
+<ion-label>Lista</ion-label>
+</div>
  
 </ion-content>
 

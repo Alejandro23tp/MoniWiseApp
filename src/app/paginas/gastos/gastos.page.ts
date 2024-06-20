@@ -17,6 +17,14 @@ export class GastosPage implements OnInit {
 
   listaSueldoFijos: any[] = [];
   
+  gasto_monto: number = 0;
+  gasto_fecha: string = '';
+  gasto_descripcion: string = '';
+  gasto_categoria_id: number = 0;
+  gasto_usuario_id: number = 0;
+  gasto_estado_pago: number = 0;
+
+  segmento: string = 'desglosar';
   constructor(
     private srvGastos: GastosService,
     private srvGeneral: GeneralService,

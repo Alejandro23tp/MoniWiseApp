@@ -82,7 +82,7 @@ export class RegistrosPage implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.cargarUsuario();
+    
     this.cargarFrecuencias();
     this.verificarSueldoFijo();
     this.cargarCategoriasPredefinidas();

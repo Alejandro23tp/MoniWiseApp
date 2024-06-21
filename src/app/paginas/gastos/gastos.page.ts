@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { ModalcontentComponent } from 'src/app/componentes/modalcontent/modalcontent.component';
 import { GastosService } from 'src/app/servicios/gastos.service';
 import { GeneralService } from 'src/app/servicios/general.service';
 import { RegistrosService } from 'src/app/servicios/registros.service';
@@ -14,54 +13,81 @@ export class GastosPage implements OnInit {
   usuario_id: number = 0;
   usuario_nombre: string = '';
   sueldoFijo: number = 0;
-
   listaSueldoFijos: any[] = [];
-  
+
   gasto_monto: number = 0;
   gasto_fecha: string = '';
   gasto_descripcion: string = '';
   gasto_categoria_id: number = 0;
-  gasto_usuario_id: number = 0;
   gasto_estado_pago: number = 0;
 
+  Categorias: any[] = [];
   segmento: string = 'desglosar';
+
   constructor(
     private srvGastos: GastosService,
     private srvGeneral: GeneralService,
     private modalController: ModalController,
-    private modal: ModalController,
     private srvRegistro: RegistrosService,
-    
   ) {}
 
   ngOnInit() {
     this.verificarSueldoFijo();
-   
+    this.cargarCategorias();
   }
-
 
   verificarSueldoFijo() {
     const usuarioLogueado = localStorage.getItem('usuarioLogueado');
-    if (usuarioLogueado != null) {
-      const usuarioLogueadoObj = JSON.parse(usuarioLogueado).id;
-      this.usuario_id = usuarioLogueadoObj;
-      const usuarioLogueadoObj2 = JSON.parse(usuarioLogueado).nombre;
-      this.usuario_nombre = usuarioLogueadoObj2;
-      this.srvRegistro
-        .verSueldoFijoPorUsuario(this.usuario_id)
-        .subscribe((res: any) => {
-          if (res.data.length > 0) {
-            this.sueldoFijo = res.data[0].monto;
-            //recorrer res.data desde [0] hasta el ultimo con forEach
-            res.data.forEach((sueldoFijo: any) => {
-              this.listaSueldoFijos.push(sueldoFijo);
-            });
-            console.log('Sus Lista Sueldo Fijos: ' ,this.listaSueldoFijos);
-          
-          } 
-        });
+    if (usuarioLogueado) {
+      const usuarioLogueadoObj = JSON.parse(usuarioLogueado);
+      this.usuario_id = usuarioLogueadoObj.id;
+      this.usuario_nombre = usuarioLogueadoObj.nombre;
+
+      this.srvRegistro.verSueldoFijoPorUsuario(this.usuario_id).subscribe((res: any) => {
+        if (res.data.length > 0) {
+          this.sueldoFijo = res.data[0].monto;
+          this.listaSueldoFijos = res.data;
+        }
+      });
     }
   }
 
- 
+  registrarGasto() {
+    if (!this.gasto_monto || !this.gasto_fecha || !this.gasto_descripcion || !this.gasto_categoria_id || this.gasto_estado_pago == null) {
+      this.srvGeneral.fun_Mensaje('Por favor, complete todos los campos.', 'danger');
+      return;
+    }
+
+    let gastoObj = {
+      monto: this.gasto_monto,
+      fecha: this.gasto_fecha,
+      descripcion: this.gasto_descripcion,
+      categoria_id: this.gasto_categoria_id,
+      usuario_id: this.usuario_id, // Usar el ID de usuario correcto
+      estado_pago: this.gasto_estado_pago,
+    };
+
+    this.srvGastos.registrarGastoS(gastoObj).subscribe((res: any) => {
+      if (res.retorno == 1) {
+        this.srvGeneral.fun_Mensaje(res.mensaje, 'success');
+        this.limpiarCampos();
+      } else {
+        this.srvGeneral.fun_Mensaje(res.mensaje, 'danger');
+      }
+    });
+  }
+
+  cargarCategorias() {
+    this.srvRegistro.verCategoriaPorId(this.usuario_id).subscribe((res: any) => {
+      this.Categorias = res.data;
+    });
+  }
+
+  limpiarCampos() {
+    this.gasto_monto = 0;
+    this.gasto_fecha = '';
+    this.gasto_descripcion = '';
+    this.gasto_categoria_id = 0;
+    this.gasto_estado_pago = 0;
+  }
 }

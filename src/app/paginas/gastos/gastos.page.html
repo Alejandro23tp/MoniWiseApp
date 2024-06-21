@@ -1,36 +1,57 @@
 <app-header></app-header>
 
 <ion-content>
-  <!----Ver Sueldo Fijo-->
+  <!-- Ver Sueldo Fijo -->
   <ion-card mode="ios" class="ion-margin-top">
     <ion-card-content>
-    <ion-card-title color="tertiary">{{ usuario_nombre }}, usted cuenta con: </ion-card-title>
-    <ion-card-title color="dark" class="sueldo">{{ sueldoFijo }}$</ion-card-title>
+      <ion-card-title color="tertiary">{{ usuario_nombre }}, usted cuenta con: </ion-card-title>
+      <ion-card-title color="dark" class="sueldo">{{ sueldoFijo }}$</ion-card-title>
     </ion-card-content>
-
-   
   </ion-card>
 
- 
   <ion-segment [(ngModel)]="segmento" color="tertiary">
-    <ion-segment-button  value="desglosar">
+    <ion-segment-button value="desglosar">
       <ion-label>Desglosar sueldo</ion-label>
     </ion-segment-button>
     <ion-segment-button value="listar">
       <ion-label>Lista Gastos</ion-label>
     </ion-segment-button>
   </ion-segment>
- 
-  <div *ngIf="segmento==='desglosar'">
-  <ion-label>Label</ion-label>
+
+  <div *ngIf="segmento === 'desglosar'">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Registrar Gasto</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item>
+          <ion-label position="floating">Monto</ion-label>
+          <ion-input [(ngModel)]="gasto_monto" type="number"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input [(ngModel)]="gasto_fecha" type="date"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Descripción</ion-label>
+          <ion-input [(ngModel)]="gasto_descripcion"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Categoría</ion-label>
+          <ion-select [(ngModel)]="gasto_categoria_id">
+            <ion-select-option *ngFor="let categoria of Categorias" [value]="categoria.id">
+              {{ categoria.nombre }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-button expand="full" (click)="registrarGasto()">Registrar Gasto</ion-button>
+      </ion-card-content>
+    </ion-card>
   </div>
 
-  <div
-    *ngIf="segmento==='listar'"
-  >
-<ion-label>Lista</ion-label>
-</div>
- 
+  <div *ngIf="segmento === 'listar'">
+    <ion-label>Lista</ion-label>
+  </div>
 </ion-content>
 
 <ion-footer>

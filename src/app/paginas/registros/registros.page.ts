@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { LoadingController, ModalController } from '@ionic/angular';
 import { ModalcontentComponent } from 'src/app/componentes/modalcontent/modalcontent.component';
 import { GeneralService } from 'src/app/servicios/general.service';
+import { MenuService } from 'src/app/servicios/menu.service';
 import { RegistrosService } from 'src/app/servicios/registros.service';
 
 @Component({
@@ -46,6 +48,10 @@ export class RegistrosPage implements OnInit {
 
   listaIngresos: any[] = [];
 
+  ListaMenus: any = [];
+
+  id_tipo_usuario: number = 0;
+
   async presentModal(contentType: string) {
     this.modalContent = contentType;
     const modal = await this.modalController.create({
@@ -78,7 +84,9 @@ export class RegistrosPage implements OnInit {
     private srvRegistro: RegistrosService,
     private srvGeneral: GeneralService,
     private modalController: ModalController,
-    private loading: LoadingController
+    private loading: LoadingController,
+    private srvM: MenuService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -86,6 +94,7 @@ export class RegistrosPage implements OnInit {
     this.cargarFrecuencias();
     this.verificarSueldoFijo();
     this.cargarCategoriasPredefinidas();
+    this.obtenerMenusPorTipoUsuario();
     // this.cargarCategoriaPorId();
   }
 
@@ -306,5 +315,35 @@ export class RegistrosPage implements OnInit {
           console.log('Sus Lista Ingresos: ', this.listaIngresos);
         }
       });
+  }
+
+  async obtenerMenusPorTipoUsuario() {
+ //Obtener el id deño usuario logueado en localStorage
+ const usuarioLogueado = localStorage.getItem('usuarioLogueado');
+ if (usuarioLogueado != null) {
+  
+   const usuarioLogueadoObj2 = JSON.parse(usuarioLogueado).tipo_usuario_id;
+   
+ 
+   this.id_tipo_usuario = usuarioLogueadoObj2;
+ }
+
+    const loadin = await this.loading.create({
+      message: 'Obteniendo menus...',
+      duration: 3000,
+    });
+    loadin.present();
+
+    this.srvM
+      .obtenerMenusPorTipoUsuario(this.id_tipo_usuario)
+      .subscribe((res: any) => {
+        this.ListaMenus = res.menus;
+        console.log(this.ListaMenus);
+        loadin.dismiss();
+      });
+  }
+
+  navigateTo(page: string) {
+    this.router.navigate([page]);
   }
 }

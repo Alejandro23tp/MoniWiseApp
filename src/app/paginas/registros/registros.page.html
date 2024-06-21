@@ -121,7 +121,6 @@
           [(ngModel)]="categoria_id"
           placeholder="Seleccionar Categoría"
           (ionChange)="onCategoriaChange($event)"
-          
           mode="md"
         >
           <ion-select-option
@@ -208,22 +207,22 @@
           </ion-button>
         </ion-col>
         <ion-col size="5">
-          <ion-button color="tertiary" expand="block" id="open-modal-g" (click)="cargarIngresos()">
+          <ion-button
+            color="tertiary"
+            expand="block"
+            id="open-modal-g"
+            (click)="cargarIngresos()"
+          >
             <ion-icon slot="end" name="eye"></ion-icon>
             Ver
           </ion-button>
         </ion-col>
       </ion-row>
     </ion-grid>
-    
   </ion-card>
-</ion-content>
 
-<ion-footer>
-  <ion-toolbar>
-    <app-tabs></app-tabs>
-  </ion-toolbar>
-</ion-footer>
+ 
+</ion-content>
 
 <ion-modal #modal trigger="open-modal-g">
   <ng-template>
@@ -245,3 +244,17 @@
     </ion-content>
   </ng-template>
 </ion-modal>
+
+<ion-toolbar>
+  <ion-tabs>
+    <ion-tab-bar slot="bottom" color="tertiary">
+      <ion-tab-button
+        *ngFor="let menu of ListaMenus"
+        (click)="navigateTo(menu.pagina)"
+      >
+        <ion-icon [name]="menu.icono"></ion-icon>
+        <ion-label>{{ menu.nombre }}</ion-label>
+      </ion-tab-button>
+    </ion-tab-bar>
+  </ion-tabs>
+</ion-toolbar>

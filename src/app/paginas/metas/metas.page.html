@@ -1,12 +1,59 @@
 <app-header></app-header>
 
-<ion-content>
-
-  
+<ion-content class="ion-padding">
+  <ion-card mode="ios" class="ion-margin-top">
+    <ion-card-header>
+      <ion-card-title class="ion-text-center" color="tertiary">Registrar Meta</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <form (ngSubmit)="registrarMetasAhorro()">
+        <ion-item lines="full">
+          <ion-label position="floating" color="tertiary">Nombre de la Meta</ion-label>
+          <ion-input [(ngModel)]="nombre" name="nombre" required></ion-input>
+        </ion-item>
+        <ion-item lines="full">
+          <ion-label position="floating" color="tertiary">Monto Objetivo</ion-label>
+          <ion-input [(ngModel)]="monto_objetivo" name="monto_objetivo" type="number" required></ion-input>
+        </ion-item>
+        <ion-item lines="full">
+          <ion-label position="floating" color="tertiary">Frecuencia</ion-label>
+          <ion-select
+            interface="action-sheet"
+            [(ngModel)]="frecuencia_id" name="frecuencia_id" (ionChange)="actualizarFechaFinal()" required>
+            <ion-select-option *ngFor="let frecuencia of listaFrecuencias" [value]="frecuencia.id">
+              {{ frecuencia.frecuencia }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item lines="full">
+          <ion-label position="stacked" color="tertiary">Fecha de Inicio</ion-label>
+          <ion-input
+            [(ngModel)]="sueldoFijo_fecha_inicio"
+            name="fecha_inicio"
+            type="date"
+            (ionChange)="actualizarFechaFinal()"
+            required>
+          </ion-input>
+        </ion-item>
+        <ion-item lines="full">
+          <ion-label position="stacked" color="tertiary">Fecha Final</ion-label>
+          <ion-input
+            [(ngModel)]="sueldoFijo_fecha_final"
+            type="date"
+            name="fecha_final"
+            readonly>
+          </ion-input>
+        </ion-item>
+        <div class="ion-margin-top">
+          <ion-button expand="block" color="tertiary" type="submit">Registrar Meta</ion-button>
+        </div>
+      </form>
+    </ion-card-content>
+  </ion-card>
 </ion-content>
 
 <ion-footer>
-  <ion-toolbar>
+  <ion-toolbar color="tertiary">
     <app-tabs></app-tabs>
   </ion-toolbar>
 </ion-footer>

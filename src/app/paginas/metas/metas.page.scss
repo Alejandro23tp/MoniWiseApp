@@ -1,0 +1,24 @@
+.ion-padding {
+  padding: 16px;
+}
+ion-card-title {
+  font-size: 1.4rem;
+  font-weight: bold;
+}
+form {
+  display: flex;
+  flex-direction: column;
+}
+.ion-margin-top {
+  margin-top: 16px;
+}
+ion-item ion-label {
+  font-weight: bold;
+}
+ion-button {
+  --border-radius: 8px;
+  --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+ion-card-content {
+  --inner-padding: 16px;
+}

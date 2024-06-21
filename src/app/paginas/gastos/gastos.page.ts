@@ -23,7 +23,8 @@ export class GastosPage implements OnInit {
 
   Categorias: any[] = [];
   segmento: string = 'desglosar';
-
+  minDate: string = '';
+  maxDate: string = '';
   constructor(
     private srvGastos: GastosService,
     private srvGeneral: GeneralService,
@@ -47,6 +48,10 @@ export class GastosPage implements OnInit {
         if (res.data.length > 0) {
           this.sueldoFijo = res.data[0].monto;
           this.listaSueldoFijos = res.data;
+          this.minDate = res.data[0].fecha_inicio;
+          this.maxDate = res.data[0].fecha_final;
+          console.log(this.listaSueldoFijos);
+          
         }
       });
     }
@@ -58,13 +63,24 @@ export class GastosPage implements OnInit {
       return;
     }
 
-    let gastoObj = {
+    const gasto_fecha = new Date(this.gasto_fecha);
+    const sueldoFijo = this.listaSueldoFijos[0];
+
+    const fecha_inicio = new Date(sueldoFijo.fecha_inicio);
+    const fecha_final = new Date(sueldoFijo.fecha_final);
+
+    if (gasto_fecha < fecha_inicio || gasto_fecha > fecha_final) {
+      this.srvGeneral.fun_Mensaje('La fecha del gasto debe estar dentro del rango del sueldo fijo.', 'danger');
+      return;
+    }
+
+    const gastoObj = {
       monto: this.gasto_monto,
       fecha: this.gasto_fecha,
       descripcion: this.gasto_descripcion,
       categoria_id: this.gasto_categoria_id,
-      usuario_id: this.usuario_id, // Usar el ID de usuario correcto
-      estado_pago: this.gasto_estado_pago,
+      usuario_id: this.usuario_id,
+      estado_pago: this.gasto_estado_pago
     };
 
     this.srvGastos.registrarGastoS(gastoObj).subscribe((res: any) => {
@@ -76,7 +92,6 @@ export class GastosPage implements OnInit {
       }
     });
   }
-
   cargarCategorias() {
     this.srvRegistro.verCategoriaPorId(this.usuario_id).subscribe((res: any) => {
       this.Categorias = res.data;

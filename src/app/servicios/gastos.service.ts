@@ -15,8 +15,8 @@ export class GastosService {
   }
 
 
-  registrarGasto(ObjetoGasto: any){
-    let url = 'registrarGasto'
+  registrarGastoS(ObjetoGasto: any){
+    let url = 'registrarGastos'
     return this.http.post(this.srvG.URLAPI + url, this.srvG.objectToFormData({
       monto : ObjetoGasto.monto,
       fecha : ObjetoGasto.fecha,

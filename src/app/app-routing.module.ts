@@ -39,6 +39,10 @@ const routes: Routes = [
     path: 'registros',
     loadChildren: () => import('./paginas/registros/registros.module').then( m => m.RegistrosPageModule)
   },
+  {
+    path: 'metas',
+    loadChildren: () => import('./paginas/metas/metas.module').then( m => m.MetasPageModule)
+  },
  
   
 ];

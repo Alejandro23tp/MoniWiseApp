@@ -29,8 +29,7 @@ export class MetasPage implements OnInit {
 
   estado: number = 1;
 
-  sueldoFijo_fecha_inicio: string = '';
-  sueldoFijo_fecha_final: string = '';
+
 
   constructor(
     private srvMetas: MetasService,
@@ -82,8 +81,8 @@ export class MetasPage implements OnInit {
   }
 
   actualizarFechaFinal() {
-    if (this.sueldoFijo_fecha_inicio && this.frecuencia_id) {
-      const fechaInicio = new Date(this.sueldoFijo_fecha_inicio);
+    if (this.fecha_inicio && this.frecuencia_id) {
+      const fechaInicio = new Date(this.fecha_inicio);
       let fechaFinal = new Date(fechaInicio);
 
       switch (this.frecuencia_id) {
@@ -100,7 +99,7 @@ export class MetasPage implements OnInit {
           break;
       }
 
-      this.sueldoFijo_fecha_final = fechaFinal.toISOString().split('T')[0];
+      this.fecha_final = fechaFinal.toISOString().split('T')[0];
     }
   }
 
@@ -116,13 +115,15 @@ export class MetasPage implements OnInit {
       estado: this.estado,
     };
 
-    this.srvMetas.registrarMetasAhorro(objMetas).subscribe((res: any) => {
+    console.log('Objeto a Registrar: ', objMetas);
+    
+    /*this.srvMetas.registrarMetasAhorro(objMetas).subscribe((res: any) => {
       if (res.retorno == 1){
         this.srvGeneral.fun_Mensaje(res.mensaje, 'primary');
       }else{
         this.srvGeneral.fun_Mensaje(res.mensaje, 'danger');
       }
 
-    });
+    });*/
   }
 }

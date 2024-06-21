@@ -28,7 +28,7 @@
         <ion-item lines="full">
           <ion-label position="stacked" color="tertiary">Fecha de Inicio</ion-label>
           <ion-input
-            [(ngModel)]="sueldoFijo_fecha_inicio"
+            [(ngModel)]="fecha_inicio"
             name="fecha_inicio"
             type="date"
             (ionChange)="actualizarFechaFinal()"
@@ -38,7 +38,7 @@
         <ion-item lines="full">
           <ion-label position="stacked" color="tertiary">Fecha Final</ion-label>
           <ion-input
-            [(ngModel)]="sueldoFijo_fecha_final"
+            [(ngModel)]="fecha_final"
             type="date"
             name="fecha_final"
             readonly>
@@ -53,7 +53,7 @@
 </ion-content>
 
 <ion-footer>
-  <ion-toolbar color="tertiary">
+  <ion-toolbar >
     <app-tabs></app-tabs>
   </ion-toolbar>
 </ion-footer>

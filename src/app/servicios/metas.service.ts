@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { GeneralService } from './general.service';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -66,4 +67,17 @@ export class MetasService {
       this.srvG.objectToFormData(objPagos)
     );
   }
+
+  cambiarMontoPorId(data: any): Observable<any> {
+    return this.http.post(this.srvG.URLAPI + 'cambiarMontoPorId', data);
+  }
+
+/*  cambiarMontoPorId(ObjetoPago: any) {
+    let url = 'cambiarMontoPorId';
+    return this.http.post<any>(
+      this.srvG.URLAPI + url,
+      this.srvG.objectToFormData(ObjetoPago)
+
+    );
+  }*/
 }

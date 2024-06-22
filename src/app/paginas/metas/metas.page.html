@@ -15,7 +15,7 @@
   </ion-segment>
 
   <div *ngIf="segment === 'registrar'">
-    <ion-card mode="ios" class="ion-margin-top">
+    <ion-card  class="ion-margin-top">
       <ion-card-content>
         <form (ngSubmit)="registrarMetasAhorro()">
           <ion-item lines="full">
@@ -40,7 +40,7 @@
               >Frecuencia</ion-label
             >
             <ion-select
-              interface="action-sheet"
+              interface="popover"
               [(ngModel)]="frecuencia_id"
               name="frecuencia_id"
               (ionChange)="actualizarFechaFinal()"
@@ -89,7 +89,7 @@
     </ion-card>
   </div>
 
-  <div *ngIf="segment === 'listar'">
+  <div *ngIf="segment === 'listar'" (click)="cargarIngresos()">
     <h2>Sus Ingresos</h2>
     <ion-list>
       <ion-item *ngFor="let ingreso of listaIngresos">
@@ -116,6 +116,7 @@
           <ion-toggle
             mode="ios"
             [(ngModel)]="pago.estado_pago"
+            disabled="false"
             (ionChange)="actualizarEstadoPago(pago)"
           ></ion-toggle>
         </ion-col>

@@ -13,11 +13,9 @@ export class SeleccionarIngresoComponent  implements OnInit {
 
   ngOnInit() {
     this.ingresos = this.navParams.get('ingresos');
-    console.log('Ingresos: ', this.ingresos);
-    
   }
 
-  seleccionarIngreso(ingreso : any) {
+  seleccionarIngreso(ingreso: any) {
     this.modalCtrl.dismiss(ingreso);
   }
 

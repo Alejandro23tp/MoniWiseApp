@@ -93,4 +93,15 @@ export class RegistrosService {
     );
   }
 
+  actualizarSueldoFijo(usuario_id: number, nuevoMonto: number) {
+    let url = 'actualizarSueldo'; 
+    return this.http.post<any>(
+      this.srvG.URLAPI + url,
+      {
+        usuario_id: usuario_id,
+        monto: nuevoMonto
+      }
+    );
+  }
+
 }

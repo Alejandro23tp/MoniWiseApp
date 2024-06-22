@@ -21,7 +21,9 @@ export class GastosPage implements OnInit {
   gasto_categoria_id: number = 0;
   gasto_estado_pago: number = 0;
 
+
   Categorias: any[] = [];
+  listaGastos: any[] = []; 
   segmento: string = 'desglosar';
 
   constructor(
@@ -64,13 +66,16 @@ export class GastosPage implements OnInit {
       descripcion: this.gasto_descripcion,
       categoria_id: this.gasto_categoria_id,
       usuario_id: this.usuario_id, // Usar el ID de usuario correcto
-      estado_pago: this.gasto_estado_pago,
+      estado_pago: '0',
     };
 
     this.srvGastos.registrarGastoS(gastoObj).subscribe((res: any) => {
       if (res.retorno == 1) {
+        this.actualizarSueldoFijo();
+        this.verificarSueldoFijo();
         this.srvGeneral.fun_Mensaje(res.mensaje, 'success');
         this.limpiarCampos();
+        //window.location.reload();
       } else {
         this.srvGeneral.fun_Mensaje(res.mensaje, 'danger');
       }
@@ -90,4 +95,40 @@ export class GastosPage implements OnInit {
     this.gasto_categoria_id = 0;
     this.gasto_estado_pago = 0;
   }
+
+  cargarGastos() {
+    this.srvGastos.verGastos().subscribe((res: any) => {
+      this.listaGastos = res.data;
+    });
+  }
+
+  segmentChanged(event: any) {
+    if (event.detail.value === 'listar') {
+      this.cargarGastos();
+    }
+  }
+
+  actualizarSueldoFijo() {
+
+    if (this.usuario_id && this.gasto_monto) {
+      this.srvRegistro.actualizarSueldoFijo(this.usuario_id, this.gasto_monto).subscribe(
+        (res: any) => {
+          if (res.retorno === 1) {
+            // Actualización exitosa, puedes manejar alguna lógica aquí si es necesario
+            console.log('Sueldo fijo actualizado correctamente');
+          } else {
+            // Manejo de errores si la actualización falla
+            console.error('Error al actualizar sueldo fijo:', res.mensaje);
+          }
+        },
+        (error) => {
+          // Manejo de errores HTTP u otros errores de la solicitud
+          console.error('Error en la solicitud:', error);
+        }
+      );
+    } else {
+      console.error('Usuario ID o nuevo monto no válidos');
+    }
+  }
+  
 }

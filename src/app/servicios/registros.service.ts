@@ -93,4 +93,13 @@ export class RegistrosService {
     );
   }
 
+
+  cambiarMontoPorId(ObjetoPago: any) {
+    let url = 'cambiarMontoPorId';
+    return this.http.post<any>(
+      this.srvG.URLAPI + url,
+      this.srvG.objectToFormData(ObjetoPago)
+    );
+  }
+
 }

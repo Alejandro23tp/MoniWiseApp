@@ -26,4 +26,12 @@ export class GastosService {
       estado_pago : ObjetoGasto.estado_pago,
     }));
   }
+
+  cambiarEstadoGasto(ObjetoGasto: any){
+    let url = 'cambiarEstadoGasto'
+    return this.http.post(this.srvG.URLAPI + url, this.srvG.objectToFormData({
+      id : ObjetoGasto.id,
+      estado_pago : ObjetoGasto.estado_pago,
+    }));
+  }
 }

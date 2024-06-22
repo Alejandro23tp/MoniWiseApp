@@ -2,16 +2,38 @@
 
 <ion-content>
   <!-- Ver Sueldo Fijo -->
-  <ion-card mode="ios" class="ion-margin-top ion-text-center">
-    <ion-card-content>
-      <ion-card-title color="tertiary">{{ usuario_nombre }}, usted cuenta con:</ion-card-title>
-      <ion-card-title color="dark" class="sueldo">{{ sueldoFijo | currency }}</ion-card-title>
-    </ion-card-content>
-  </ion-card>
+  <div>
+    <ion-card mode="ios" class="summary-card">
+      <ion-card-header>
+        <ion-card-title class="ion-text-center" color="tertiary">
+          {{ usuario_nombre }}
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-grid fixed class="ion-margin-top">
+          <ion-row class="summary-row">
+            <ion-col size="4" class="summary-title"><strong>Sueldo Fijo</strong></ion-col>
+            <ion-col size="4" class="summary-title"><strong>Gastos Activos</strong></ion-col>
+            <ion-col size="4" class="summary-title"><strong>Saldo Disponible</strong></ion-col>
+          </ion-row>
+          <ion-row class="summary-row">
+            <ion-col size="4" class="summary-value">{{ sueldoFijo | currency }}</ion-col>
+            <ion-col size="4" class="summary-value">{{ calcularGastosActivos() | currency }}</ion-col>
+            <ion-col size="4" class="summary-value">{{ calcularSaldoDisponible() | currency }}</ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
+  </div>
 
-  <ion-segment [(ngModel)]="segmento" (ionChange)="segmentChanged($event)" color="tertiary" class="ion-margin">
+  <ion-segment
+    [(ngModel)]="segmento"
+    (ionChange)="segmentChanged($event)"
+    color="tertiary"
+    class="ion-margin-top"
+  >
     <ion-segment-button value="desglosar">
-      <ion-label>Desglosar sueldo</ion-label>
+      <ion-label>Registrar</ion-label>
     </ion-segment-button>
     <ion-segment-button value="listar">
       <ion-label>Lista Gastos</ion-label>
@@ -22,28 +44,36 @@
   <div *ngIf="segmento === 'desglosar'" class="ion-padding">
     <ion-card>
       <ion-card-header>
-        <ion-card-title>Registrar Gasto</ion-card-title>
+        <ion-card-title class="ion-text-center">Registrar Gasto</ion-card-title>
       </ion-card-header>
-      <ion-card-content >
-        <ion-item>
-          <ion-label position="floating">Monto </ion-label>
-          <ion-input [(ngModel)]="gasto_monto" type="number" placeholder="Ingrese el monto"></ion-input>
+      <ion-card-content>
+        <ion-item lines="inset">
+          <ion-label position="floating" color="tertiary">Monto</ion-label>
+          <ion-input [(ngModel)]="gasto_monto" type="number"></ion-input>
         </ion-item>
-        <ion-item>
-          <ion-input [(ngModel)]="gasto_fecha" type="date" [min]="minDate" [max]="maxDate"></ion-input>
+        <ion-item lines="inset">
+          <ion-label position="stacked" color="tertiary">Fecha</ion-label>
+          <ion-input
+            [(ngModel)]="gasto_fecha"
+            type="date"
+            [min]="minDate"
+            [max]="maxDate"
+          ></ion-input>
         </ion-item>
-        <ion-item>
-          <ion-input [(ngModel)]="gasto_descripcion" placeholder="Descripción"></ion-input>
+        <ion-item lines="inset">
+          <ion-label position="stacked" color="tertiary">Descripción</ion-label>
+          <ion-input [(ngModel)]="gasto_descripcion"></ion-input>
         </ion-item>
-        <ion-item>
-          <ion-label position="floating">Categoría</ion-label>
+        <ion-item lines="inset">
+          <ion-label position="floating" color="tertiary">Categoría</ion-label>
           <ion-select [(ngModel)]="gasto_categoria_id" interface="popover">
-            <ion-select-option *ngFor="let categoria of Categorias" [value]="categoria.id">
+            <ion-select-option
+              *ngFor="let categoria of Categorias"
+              [value]="categoria.id"
+            >
               {{ categoria.nombre }}
             </ion-select-option>
           </ion-select>
-        </ion-item>
-        <ion-item>
         </ion-item>
         <ion-button expand="full" color="tertiary" (click)="registrarGasto()">Registrar Gasto</ion-button>
       </ion-card-content>
@@ -54,21 +84,24 @@
   <div *ngIf="segmento === 'listar'" class="ion-padding">
     <ion-card>
       <ion-card-header>
-        <ion-card-title>Lista de Gastos</ion-card-title>
+        <ion-card-title class="ion-text-center">Lista de Gastos</ion-card-title>
       </ion-card-header>
       <ion-card-content>
         <ion-list>
-          <ion-item *ngFor="let gasto of listaGastos" lines="none">
+          <ion-item *ngFor="let gasto of listaGastos" lines="full">
             <ion-avatar slot="start">
               <ion-icon name="cash-outline" style="font-size: 2em;"></ion-icon>
             </ion-avatar>
             <ion-label>
               <h2>{{ gasto.descripcion }}</h2>
-              <p>{{ gasto.fecha | date: 'shortDate' }} - {{ gasto.monto | currency }} </p>
-              <p>Estado: <span [ngClass]="{ 'text-success': gasto.estado_pago === 1, 'text-warning': gasto.estado_pago === 0 }">
-                {{ gasto.estado_pago ? 'Pagado' : 'Pendiente' }}
-              </span></p>
+              <p>ID: {{ gasto.id }}</p>
+              <p>{{ gasto.fecha | date: 'shortDate' }} - {{ gasto.monto | currency }}</p>
             </ion-label>
+            <ion-toggle
+              mode="ios"
+              [(ngModel)]="gasto.estado_pago"
+              (ionChange)="actualizarEstadoPago(gasto)"
+            ></ion-toggle>
           </ion-item>
         </ion-list>
       </ion-card-content>

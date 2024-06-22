@@ -221,7 +221,8 @@
     </ion-grid>
   </ion-card>
 
- 
+  
+  
 </ion-content>
 
 <ion-modal #modal trigger="open-modal-g">
@@ -245,16 +246,18 @@
   </ng-template>
 </ion-modal>
 
-<ion-toolbar>
-  <ion-tabs>
-    <ion-tab-bar slot="bottom" color="tertiary">
-      <ion-tab-button
-        *ngFor="let menu of ListaMenus"
-        (click)="navigateTo(menu.pagina)"
-      >
-        <ion-icon [name]="menu.icono"></ion-icon>
-        <ion-label>{{ menu.nombre }}</ion-label>
-      </ion-tab-button>
-    </ion-tab-bar>
-  </ion-tabs>
-</ion-toolbar>
+<ion-footer >
+  <ion-toolbar>
+    <ion-tabs>
+      <ion-tab-bar slot="bottom" color="tertiary">
+        <ion-tab-button
+          *ngFor="let menu of ListaMenus"
+          (click)="navigateTo(menu.pagina)"
+        >
+          <ion-icon [name]="menu.icono"></ion-icon>
+          <ion-label>{{ menu.nombre }}</ion-label>
+        </ion-tab-button>
+      </ion-tab-bar>
+    </ion-tabs>
+  </ion-toolbar>
+</ion-footer>

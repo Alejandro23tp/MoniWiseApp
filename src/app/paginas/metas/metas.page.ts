@@ -208,48 +208,39 @@ export class MetasPage implements OnInit {
     modal.onDidDismiss().then((data) => {
       if (data.data) {
         const ingresoSeleccionado = data.data;
-        console.log('Ingreso seleccionado: ', ingresoSeleccionado);
-        
-        if (ingresoSeleccionado.monto >= pago.monto) {
-          ingresoSeleccionado.monto -= pago.monto;
-          const estado = 1
-          const objPagos = {
-            id: pago.id,
-            estado_pago: estado,
-          };
-          console.log('Objeto de pago: ', objPagos);
-          
+        console.log('Ingreso seleccionado: ', ingresoSeleccionado.monto);
+        console.log('Ingreso seleccionado: ', pago.monto);
+        console.log(ingresoSeleccionado.monto >= pago.monto);
+        console.log((ingresoSeleccionado.monto -= pago.monto));
 
-          this.srvMetas.cambiarEstadoPagosAhorro(objPagos).subscribe(
+        ingresoSeleccionado.monto -= pago.monto;
+        const estado = 1;
+
+        this.srvMetas
+          .cambiarEstadoPagosAhorro({ id: pago.id, estado_pago: estado })
+          .subscribe(
             (res: any) => {
               if (res.retorno == 1) {
                 this.srvGeneral.fun_Mensaje(res.mensaje, 'primary');
-                const objMonto = {
-                  id: ingresoSeleccionado.id,
-                  monto: ingresoSeleccionado.monto,
-                };
-                console.log('Objeto de pago: ', objMonto);
-                this.srvRegistro.cambiarMontoPorId(objMonto).subscribe(
-                  (res: any) => {
-                    if (res.retorno == 1) {
-                      this.srvGeneral.fun_Mensaje(res.mensaje, 'primary');
-                    } else {
-                      this.srvGeneral.fun_Mensaje(res.mensaje, 'danger');
-                    }
-                  },
-                );
+                this.srvRegistro
+                  .cambiarMontoPorId({
+                    id: ingresoSeleccionado.id,
+                    monto: ingresoSeleccionado.monto,
+                  })
+                  .subscribe();
               } else {
                 this.srvGeneral.fun_Mensaje(res.mensaje, 'danger');
+                this.cargarIngresos();
               }
             },
             (error) => {
               console.error('Error al actualizar el estado del pago: ', error);
-              this.srvGeneral.fun_Mensaje('Error al actualizar el estado del pago', 'danger');
+              this.srvGeneral.fun_Mensaje(
+                'Error al actualizar el estado del pago',
+                'danger'
+              );
             }
           );
-        } else {
-          this.srvGeneral.fun_Mensaje('El monto del ingreso seleccionado es insuficiente.', 'danger');
-        }
       }
     });
 

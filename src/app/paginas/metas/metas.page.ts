@@ -15,6 +15,22 @@ export class MetasPage implements OnInit {
 
   usuario_id: number = 0;
 
+  frecuencia_id: number = 0;
+
+  nombre: string = '';
+  monto_objetivo: number = 0;
+  
+
+  fecha_creacion: string = '';
+  fecha_inicio: string = '';
+  fecha_final: string = '';
+
+ 
+
+  estado: number = 1;
+
+
+
   constructor(
     private srvMetas: MetasService,
     private srvGeneral: GeneralService,
@@ -64,4 +80,50 @@ export class MetasPage implements OnInit {
       });
   }
 
+  actualizarFechaFinal() {
+    if (this.fecha_inicio && this.frecuencia_id) {
+      const fechaInicio = new Date(this.fecha_inicio);
+      let fechaFinal = new Date(fechaInicio);
+
+      switch (this.frecuencia_id) {
+        case 1: // Mensual
+          fechaFinal.setMonth(fechaFinal.getMonth() + 1);
+          break;
+        case 2: // Quincenal
+          fechaFinal.setDate(fechaFinal.getDate() + 15);
+          break;
+        case 3: // Semanal
+          fechaFinal.setDate(fechaFinal.getDate() + 7);
+          break;
+        default:
+          break;
+      }
+
+      this.fecha_final = fechaFinal.toISOString().split('T')[0];
+    }
+  }
+
+  registrarMetasAhorro() {
+    const objMetas: any = {
+      nombre: this.nombre,
+      monto_objetivo: this.monto_objetivo,
+      frecuencia_id: this.frecuencia_id,
+      fecha_creacion: this.fecha_creacion,
+      fecha_inicio: this.fecha_inicio,
+      fecha_final: this.fecha_final,
+      usuario_id: this.usuario_id,
+      estado: this.estado,
+    };
+
+    console.log('Objeto a Registrar: ', objMetas);
+    
+    /*this.srvMetas.registrarMetasAhorro(objMetas).subscribe((res: any) => {
+      if (res.retorno == 1){
+        this.srvGeneral.fun_Mensaje(res.mensaje, 'primary');
+      }else{
+        this.srvGeneral.fun_Mensaje(res.mensaje, 'danger');
+      }
+
+    });*/
+  }
 }

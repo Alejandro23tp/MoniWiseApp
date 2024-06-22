@@ -30,7 +30,7 @@
           <ion-input [(ngModel)]="gasto_monto" type="number" placeholder="Ingrese el monto"></ion-input>
         </ion-item>
         <ion-item>
-          <ion-input [(ngModel)]="gasto_fecha" type="date"></ion-input>
+          <ion-input [(ngModel)]="gasto_fecha" type="date" [min]="minDate" [max]="maxDate"></ion-input>
         </ion-item>
         <ion-item>
           <ion-input [(ngModel)]="gasto_descripcion" placeholder="Descripción"></ion-input>

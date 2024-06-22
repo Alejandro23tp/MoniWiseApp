@@ -34,4 +34,12 @@ export class GastosService {
       estado_pago : ObjetoGasto.estado_pago,
     }));
   }
+
+
+  verGastosPorUsuario(usuario_id: any){
+    let url = 'verGastosPorUsuario'
+    return this.http.post<any>(this.srvG.URLAPI + url, this.srvG.objectToFormData({
+      usuario_id : usuario_id,
+    }));
+  }
 }

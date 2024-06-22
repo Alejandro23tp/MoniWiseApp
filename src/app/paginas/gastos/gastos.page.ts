@@ -43,10 +43,10 @@ export class GastosPage implements OnInit {
     this.calcularGastosActivos();
   }
 
-  ionViewWillEnter(){
+  ionViewWillEnter() {
     this.cargarCategorias();
+    this.verificarSueldoFijo
   }
-
 
   verificarSueldoFijo() {
     const usuarioLogueado = localStorage.getItem('usuarioLogueado');
@@ -102,7 +102,9 @@ export class GastosPage implements OnInit {
     const saldoDisponible = this.calcularSaldoDisponible();
     if (this.gasto_monto > saldoDisponible) {
       this.srvGeneral.fun_Mensaje(
-        `El monto del gasto no puede ser mayor al saldo disponible de ${saldoDisponible.toFixed(2)}.`,
+        `El monto del gasto no puede ser mayor al saldo disponible de ${saldoDisponible.toFixed(
+          2
+        )}.`,
         'danger'
       );
       return;
@@ -145,9 +147,14 @@ export class GastosPage implements OnInit {
   }
 
   cargarGastos() {
-    this.srvGastos.verGastos().subscribe((res: any) => {
-      this.listaGastos = res.data;
-    });
+    console.log('usuario_id: ', this.usuario_id);
+
+    this.srvGastos
+      .verGastosPorUsuario(this.usuario_id)
+      .subscribe((res: any) => {
+        this.listaGastos = res.data;
+        console.log('listaGastos: ', this.listaGastos);
+      });
   }
 
   segmentChanged(event: any) {

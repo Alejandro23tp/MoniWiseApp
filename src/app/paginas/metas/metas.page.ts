@@ -200,6 +200,8 @@ export class MetasPage implements OnInit {
   async actualizarEstadoPago(pago: any) {
     const modal = await this.modalController.create({
       component: SeleccionarIngresoComponent,
+      breakpoints: [0.35],
+      initialBreakpoint: 0.35, 
       componentProps: {
         ingresos: this.listaIngresos,
       },

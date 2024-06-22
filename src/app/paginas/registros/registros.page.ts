@@ -13,73 +13,35 @@ import { RegistrosService } from 'src/app/servicios/registros.service';
 })
 export class RegistrosPage implements OnInit {
   listaFrecuencias: any[] = [];
+  sueldoFijo_usuario_id: number = 0;
+  sueldoFijo: string = '';
+  existeSueldoFijo: boolean = false;
+  listaSueldoFijos: any[] = [];
+  listaCategoriasPredefinidas: any[] = [];
+  listaCategoriasPorId: any[] = [];
+  listaIngresos: any[] = [];
+  ListaMenus: any = [];
+  nombreUsuario: string = '';
+  mostrarFormulario: boolean = false;
+  modalContent: string = '';
+  id_tipo_usuario: number = 0;
 
+  // Variables para los formularios
   frecuencia_nombre: string = '';
   sueldoFijo_monto: number = 0;
   sueldoFijo_frecuencia_id: number = 0;
   sueldoFijo_fecha_inicio: string = '';
   sueldoFijo_fecha_final: string = '';
-  sueldoFijo_usuario_id: number = 0;
   sueldoFijo_estado: number = 1;
-  sueldoFijo: string = '';
-  existeSueldoFijo: boolean = false;
-
-  listaSueldoFijos: any[] = [];
-
-  mostrarFormulario: boolean = false; // Nueva propiedad
-  modalContent: string = '';
-
-  listaCategoriasPredefinidas: any[] = [];
-  listaCategoriasPorId: any[] = [];
-
   categoria_nombre: string = '';
   categoria_descripcion: string = '';
-
   categoria_estado: number = 1;
   categoria_id: number = 0;
-
-  nombreUsuario: string = '';
-
   ingreso_fecha: string = '';
   ingreso_monto: number = 0;
   ingreso_descripcion: string = '';
-  ingreso_usuario_id: number = 0;
   ingreso_estado: number = 1;
 
-  listaIngresos: any[] = [];
-
-  ListaMenus: any = [];
-
-  id_tipo_usuario: number = 0;
-
-  async presentModal(contentType: string) {
-    this.modalContent = contentType;
-    const modal = await this.modalController.create({
-      component: ModalcontentComponent,
-      breakpoints: [0.25],
-      initialBreakpoint: 0.25, // Asegúrate de definir ModalContentComponent
-      //Los componentProps son los que se pasan a la vista del componente modal
-      componentProps: {
-        modalContent: this.modalContent,
-        nombreUsuario: this.nombreUsuario,
-        listaCategoriasPorId: this.listaCategoriasPorId,
-        listaSueldoFijos: this.listaSueldoFijos,
-      },
-    });
-    return await modal.present();
-  }
-
-  openCategoriaModal() {
-    this.presentModal('categoria');
-  }
-
-  openSueldoFijoModal() {
-    this.presentModal('sueldoFijo');
-  }
-
-  closeModal(modal: any) {
-    modal.dismiss();
-  }
   constructor(
     private srvRegistro: RegistrosService,
     private srvGeneral: GeneralService,
@@ -89,72 +51,59 @@ export class RegistrosPage implements OnInit {
     private router: Router
   ) {}
 
-  ngOnInit() {
-    
-    this.cargarFrecuencias();
+  async ngOnInit() {
+    const loading = await this.loading.create({
+      message: 'Cargando datos...',
+    });
+    await loading.present();
+
+    // Cargar datos en paralelo
+    await Promise.all([
+      this.cargarFrecuencias(),
+      this.cargarUsuario(),
+      this.cargarCategoriasPredefinidas(),
+      this.obtenerMenusPorTipoUsuario(),
+      this.cargarCategoriaPorId(),
+    ]);
+
     this.verificarSueldoFijo();
-    this.cargarCategoriasPredefinidas();
-    this.obtenerMenusPorTipoUsuario();
-    // this.cargarCategoriaPorId();
+    loading.dismiss();
   }
 
-  ionViewWillEnter() {
-    this.cargarUsuario();
-    this.cargarFrecuencias();
-    //this.cargarCategoriaPorId();
-    //this.cargarCategoriasPredefinidas();
-  }
-
-  cargarUsuario() {
-    //Obtener el id deño usuario logueado en localStorage
+  async cargarUsuario() {
     const usuarioLogueado = localStorage.getItem('usuarioLogueado');
-    if (usuarioLogueado != null) {
-      const usuarioLogueadoObj = JSON.parse(usuarioLogueado).id;
-      const usuarioLogueadoObj2 = JSON.parse(usuarioLogueado).nombre;
-      this.sueldoFijo_usuario_id = usuarioLogueadoObj;
-      this.nombreUsuario = usuarioLogueadoObj2;
+    if (usuarioLogueado) {
+      const usuarioLogueadoObj = JSON.parse(usuarioLogueado);
+      this.sueldoFijo_usuario_id = usuarioLogueadoObj.id;
+      this.nombreUsuario = usuarioLogueadoObj.nombre;
+      this.id_tipo_usuario = usuarioLogueadoObj.tipo_usuario_id;
       console.log('usuario_id: ' + this.sueldoFijo_usuario_id);
       console.log('usuario_nombre: ' + this.nombreUsuario);
     }
   }
 
-  cargarFrecuencias() {
+  async cargarFrecuencias() {
     this.srvRegistro.verFrecuencias().subscribe((res: any) => {
       this.listaFrecuencias = res.data;
     });
   }
 
   verificarSueldoFijo() {
-    const usuarioLogueado = localStorage.getItem('usuarioLogueado');
-    if (usuarioLogueado != null) {
-      const usuarioLogueadoObj = JSON.parse(usuarioLogueado).id;
-      this.sueldoFijo_usuario_id = usuarioLogueadoObj;
-      this.srvRegistro
-        .verSueldoFijoPorUsuario(this.sueldoFijo_usuario_id)
-        .subscribe((res: any) => {
-          if (res.data.length > 0) {
-            this.sueldoFijo = res.data[0].monto;
-            //recorrer res.data desde [0] hasta el ultimo con for of
-            for (let i = 0; i < res.data.length; i++) {
-              //si lista de sueldo fijos no tiene datos, ejecuta el push caso contrario
-              if (this.listaSueldoFijos.length == 0) {
-                this.listaSueldoFijos.push(res.data[i]);
-              } else {
-                //this.listaSueldoFijos.push(res.data[i]);
-              }
-            }
-
-            console.log('Sus Lista Sueldo Fijos: ', this.listaSueldoFijos);
-            this.existeSueldoFijo = true;
-          } else {
-            this.existeSueldoFijo = false;
-          }
-        });
+    if (this.sueldoFijo_usuario_id) {
+      this.srvRegistro.verSueldoFijoPorUsuario(this.sueldoFijo_usuario_id).subscribe((res: any) => {
+        if (res.data.length > 0) {
+          this.sueldoFijo = res.data[0].monto;
+          this.listaSueldoFijos = res.data;
+          this.existeSueldoFijo = true;
+        } else {
+          this.existeSueldoFijo = false;
+        }
+      });
     }
   }
 
   registrarSueldoFijo() {
-    let ObjetoSueldoFijo = {
+    const ObjetoSueldoFijo = {
       monto: this.sueldoFijo_monto,
       frecuencia_id: this.sueldoFijo_frecuencia_id,
       fecha_inicio: this.sueldoFijo_fecha_inicio,
@@ -162,31 +111,27 @@ export class RegistrosPage implements OnInit {
       usuario_id: this.sueldoFijo_usuario_id,
       estado: this.sueldoFijo_estado,
     };
-    this.srvRegistro
-      .registrarSueldoFijo(ObjetoSueldoFijo)
-      .subscribe((res: any) => {
-        if (res.retorno == 1) {
-          this.srvGeneral.fun_Mensaje(res.mensaje, 'success');
-          //this.verificarSueldoFijo(); // Verificar de nuevo si el sueldo fijo ya está registrado
-        } else {
-          this.srvGeneral.fun_Mensaje(res.mensaje, 'danger');
-        }
-      });
+    this.srvRegistro.registrarSueldoFijo(ObjetoSueldoFijo).subscribe((res: any) => {
+      if (res.retorno == 1) {
+        this.srvGeneral.fun_Mensaje(res.mensaje, 'success');
+        this.verificarSueldoFijo();
+      } else {
+        this.srvGeneral.fun_Mensaje(res.mensaje, 'danger');
+      }
+    });
   }
 
   registrarIngresos() {
-    let ObjetoIngreso = {
+    const ObjetoIngreso = {
       fecha: this.ingreso_fecha,
       monto: this.ingreso_monto,
       descripcion: this.ingreso_descripcion,
       usuario_id: this.sueldoFijo_usuario_id,
       estado: this.ingreso_estado,
     };
-    console.log(ObjetoIngreso);
     this.srvRegistro.registrarIngresos(ObjetoIngreso).subscribe((res: any) => {
       if (res.retorno == 1) {
         this.srvGeneral.fun_Mensaje(res.mensaje, 'success');
-        //Limpiar campos de formulario
         this.ingreso_fecha = '';
         this.ingreso_monto = 0;
         this.ingreso_descripcion = '';
@@ -230,60 +175,41 @@ export class RegistrosPage implements OnInit {
   cargarCategoriasPredefinidas() {
     this.srvRegistro.verCategoriasPredefinidas().subscribe((res: any) => {
       this.listaCategoriasPredefinidas = res.data;
-      console.log(this.listaCategoriasPredefinidas);
     });
   }
 
   registrarCategoria() {
-    let ObjetoCategoria = {
+    const ObjetoCategoria = {
       nombre: this.categoria_nombre,
       descripcion: this.categoria_descripcion,
       usuario_id: this.sueldoFijo_usuario_id,
       estado: this.categoria_estado,
     };
-    console.log(ObjetoCategoria);
-    this.srvRegistro
-      .registrarCategoria(ObjetoCategoria)
-      .subscribe((res: any) => {
-        if (res.retorno == 1) {
-          this.srvGeneral.fun_Mensaje(res.mensaje, 'success');
-        } else {
-          this.srvGeneral.fun_Mensaje(res.mensaje, 'danger');
-        }
-      });
+    this.srvRegistro.registrarCategoria(ObjetoCategoria).subscribe((res: any) => {
+      if (res.retorno == 1) {
+        this.srvGeneral.fun_Mensaje(res.mensaje, 'success');
+      } else {
+        this.srvGeneral.fun_Mensaje(res.mensaje, 'danger');
+      }
+    });
   }
 
   async cargarCategoriaPorId() {
     const loading = await this.loading.create({
       message: 'Cargando...',
     });
-    const usuarioLogueado = localStorage.getItem('usuarioLogueado');
-    if (usuarioLogueado != null) {
-      const usuarioLogueadoObj = JSON.parse(usuarioLogueado).id;
-      this.sueldoFijo_usuario_id = usuarioLogueadoObj;
-    }
-
-    this.srvRegistro
-      .verCategoriaPorId(this.sueldoFijo_usuario_id)
-      .subscribe((res: any) => {
+    if (this.sueldoFijo_usuario_id) {
+      this.srvRegistro.verCategoriaPorId(this.sueldoFijo_usuario_id).subscribe((res: any) => {
         if (res.data.length > 0) {
-          //recorrer res.data desde [0] hasta el ultimo con forEach
-
-          if (this.listaCategoriasPorId.length == 0) {
-            res.data.forEach((categoria: any) => {
-              this.listaCategoriasPorId.push(categoria);
-            });
-          }
-
-          console.log('Sus Lista Categorias: ', this.listaCategoriasPorId);
+          this.listaCategoriasPorId = res.data;
         }
+        loading.dismiss();
       });
+    }
   }
 
   onCategoriaChange(event: any) {
-    const categoriaSeleccionada = this.listaCategoriasPredefinidas.find(
-      (c) => c.id === event.detail.value
-    );
+    const categoriaSeleccionada = this.listaCategoriasPredefinidas.find(c => c.id === event.detail.value);
     if (categoriaSeleccionada) {
       this.categoria_nombre = categoriaSeleccionada.nombre;
       this.categoria_descripcion = '';
@@ -298,52 +224,60 @@ export class RegistrosPage implements OnInit {
       message: 'Cargando ingresos...',
       spinner: 'bubbles',
     });
-    loading.present();
-    this.srvRegistro
-      .verIngresosUsuario(this.sueldoFijo_usuario_id)
-      .subscribe((res: any) => {
-        if (res.data.length > 0) {
-          //recorrer res.data desde [0] hasta el ultimo con forEach
-          if (this.listaIngresos.length == 0) {
-            res.data.forEach((ingreso: any) => {
-              this.listaIngresos.push(ingreso);
-              
-            });
-           
-          }
-          loading.dismiss();
-          console.log('Sus Lista Ingresos: ', this.listaIngresos);
-        }
-      });
+    await loading.present();
+    this.srvRegistro.verIngresosUsuario(this.sueldoFijo_usuario_id).subscribe((res: any) => {
+      this.listaIngresos = res.data;
+      this.calcularSumaIngresos();
+      loading.dismiss();
+    });
   }
 
   async obtenerMenusPorTipoUsuario() {
- //Obtener el id deño usuario logueado en localStorage
- const usuarioLogueado = localStorage.getItem('usuarioLogueado');
- if (usuarioLogueado != null) {
-  
-   const usuarioLogueadoObj2 = JSON.parse(usuarioLogueado).tipo_usuario_id;
-   
- 
-   this.id_tipo_usuario = usuarioLogueadoObj2;
- }
-
-    const loadin = await this.loading.create({
-      message: 'Obteniendo menus...',
+    const loading = await this.loading.create({
+      message: 'Obteniendo menús...',
       duration: 3000,
     });
-    loadin.present();
-
-    this.srvM
-      .obtenerMenusPorTipoUsuario(this.id_tipo_usuario)
-      .subscribe((res: any) => {
-        this.ListaMenus = res.menus;
-        console.log(this.ListaMenus);
-        loadin.dismiss();
-      });
+    await loading.present();
+    this.srvM.obtenerMenusPorTipoUsuario(this.id_tipo_usuario).subscribe((res: any) => {
+      this.ListaMenus = res.menus;
+      loading.dismiss();
+    });
   }
 
   navigateTo(page: string) {
     this.router.navigate([page]);
+  }
+
+  calcularSumaIngresos() {
+    
+  }
+
+  async presentModal(contentType: string) {
+    this.modalContent = contentType;
+    const modal = await this.modalController.create({
+      component: ModalcontentComponent,
+      breakpoints: [0.30],
+      initialBreakpoint: 0.30, // Asegúrate de definir ModalContentComponent
+      //Los componentProps son los que se pasan a la vista del componente modal
+      componentProps: {
+        modalContent: this.modalContent,
+        nombreUsuario: this.nombreUsuario,
+        listaCategoriasPorId: this.listaCategoriasPorId,
+        listaSueldoFijos: this.listaSueldoFijos,
+      },
+    });
+    return await modal.present();
+  }
+
+  openCategoriaModal() {
+    this.presentModal('categoria');
+  }
+
+  openSueldoFijoModal() {
+    this.presentModal('sueldoFijo');
+  }
+
+  closeModal(modal: any) {
+    modal.dismiss();
   }
 }

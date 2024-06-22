@@ -93,15 +93,14 @@ export class RegistrosService {
     );
   }
 
-
-  actualizarSueldoFijo(usuario_id: number, nuevoMonto: number) {
-    let url = 'actualizarSueldo'; 
+  actualizarSueldoFijo(usuario_id: number, monto: number) {
+    let url = 'actualizarSueldo'; // Asegúrate de usar la ruta correcta
     return this.http.post<any>(
       this.srvG.URLAPI + url,
-      {
+      this.srvG.objectToFormData({
         usuario_id: usuario_id,
-        monto: nuevoMonto
-      }
+        monto: monto
+      })
     );
   }
 

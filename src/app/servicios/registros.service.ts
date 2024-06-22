@@ -102,6 +102,8 @@ export class RegistrosService {
         usuario_id: usuario_id,
         monto: nuevoMonto
       }
+    );
+  }
 
   cambiarMontoPorId(ObjetoPago: any) {
     let url = 'cambiarMontoPorId';

@@ -52,6 +52,8 @@ export class RegistrosPage implements OnInit {
   ) {}
 
   async ngOnInit() {
+    
+    
     const loading = await this.loading.create({
       message: 'Cargando datos...',
     });
@@ -68,6 +70,27 @@ export class RegistrosPage implements OnInit {
 
     this.verificarSueldoFijo();
     loading.dismiss();
+  }
+
+  ionViewWillEnter(){
+   
+    this.verificarSueldoFijo();
+  }
+
+  handleRefresh(event: any) {
+    setTimeout(() => {
+      // Any calls to load data go here
+      event.target.complete();
+      this.cargarFrecuencias(),
+      this.cargarUsuario(),
+      this.cargarCategoriasPredefinidas(),
+      this.obtenerMenusPorTipoUsuario(),
+      this.cargarCategoriaPorId();
+      this.verificarSueldoFijo();
+     
+
+
+    }, 2000);
   }
 
   async cargarUsuario() {

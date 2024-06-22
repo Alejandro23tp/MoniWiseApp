@@ -29,4 +29,41 @@ export class MetasService {
       })
     );
   }
+
+  verPagosAhorro() {
+    let url = 'verPagosAhorro';
+    return this.http.get<any>(this.srvG.URLAPI + url);
+  }
+
+  registrarPagosAhorro(objPagos: any) {
+    let url = 'registrarPagosAhorro';
+    return this.http.post(
+      this.srvG.URLAPI + url,
+      this.srvG.objectToFormData({
+        monto: objPagos.monto,
+        fecha: objPagos.fecha,
+        meta_id: objPagos.meta_id,
+        usuario_id: objPagos.usuario_id,
+        estado_pago: objPagos.estado_pago,
+      })
+    );
+  }
+
+  verPagosAhorroUsuario(usuario_id: number) {
+    let url = 'verPagosAhorroUsuario';
+    return this.http.post(
+      this.srvG.URLAPI + url,
+      this.srvG.objectToFormData({
+        usuario_id: usuario_id,
+      })
+    );
+  }
+
+  cambiarEstadoPagosAhorro(objPagos: any) {
+    let url = 'cambiarEstadoPagosAhorro';
+    return this.http.post(
+      this.srvG.URLAPI + url,
+      this.srvG.objectToFormData(objPagos)
+    );
+  }
 }

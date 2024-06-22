@@ -6,15 +6,20 @@ import { ToastController } from '@ionic/angular';
   providedIn: 'root',
 })
 export class GeneralService {
+
  //  public URLAPI: string = 'https://klebermera.000webhostapp.com/api/moniwiseapi/';
  public URLAPI: string = 'http://127.0.0.1/moniwiseapi/';
+
+  public URLAPI: string = 'https://klebermera.000webhostapp.com/api/moniwiseapi/';
+  //public URLAPI: string = 'http://127.0.0.1/moniwiseapi/';
+
   constructor(private router: Router, private toast: ToastController) {}
-  
+
   //funciones generales
   irA(url: string) {
     this.router.navigateByUrl(url);
   }
-  
+
   objectToFormData(obj: any, form?: any, namespace?: any) {
     let fd: any = form || new FormData();
     let formKey: any;

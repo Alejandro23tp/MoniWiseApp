@@ -1,0 +1,54 @@
+<ion-header>
+  <ion-toolbar color="tertiary">
+    <ion-title>Graficos</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/principal"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+
+</ion-header>
+
+<ion-content>
+  <ion-grid fixed>
+    <ion-row>
+      <ion-col size="12">
+        <div >
+          <apx-chart
+            [series]="chartOptions.series"
+            [chart]="chartOptions.chart"
+            [labels]="chartOptions.labels"
+            [plotOptions]="chartOptions.plotOptions"
+            class="chart-container"
+          ></apx-chart>
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12">
+        <div >
+          <apx-chart
+            [series]="chartOptions2.series"
+            [chart]="chartOptions2.chart"
+            [labels]="chartOptions2.labels"
+            [plotOptions]="chartOptions2.plotOptions"
+            class="chart-container"
+          ></apx-chart>
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12">
+        <div >
+          <apx-chart
+            [series]="chartOptions3.series"
+            [chart]="chartOptions3.chart"
+            [plotOptions]="chartOptions3.plotOptions"
+            [dataLabels]="chartOptions3.dataLabels"
+            [xaxis]="chartOptions3.xaxis"
+            class="chart-container"
+          ></apx-chart>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

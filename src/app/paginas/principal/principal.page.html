@@ -1,9 +1,6 @@
 <ion-header>
   <ion-toolbar color="tertiary">
     <ion-buttons slot="secondary">
-      <ion-button>
-        <ion-icon slot="icon-only" name="notifications-outline"></ion-icon>
-      </ion-button>
       <ion-button id="open-modal-p">
         <ion-icon slot="icon-only" name="person-circle-outline"></ion-icon>
       </ion-button>
@@ -122,23 +119,36 @@
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <!----Bienvenido al usuario -->
-  <ion-card mode="ios">
-    <ion-card-title color="tertiary">Bienvenido </ion-card-title>
-    <ion-card-subtitle>{{ usuario_nombre }}</ion-card-subtitle>
-  </ion-card>
- 
-  <!----Bienvenido al usuario -->
 
-  <ion-tabs>
-    <ion-tab-bar slot="bottom" color="tertiary">
-      <ion-tab-button
-        *ngFor="let menu of ListaMenus"
-        (click)="navigateTo(menu.pagina)"
-      >
-        <ion-icon [name]="menu.icono"></ion-icon>
-        <ion-label>{{ menu.nombre }}</ion-label>
-      </ion-tab-button>
-    </ion-tab-bar>
-  </ion-tabs>
+  <ion-card>
+    <ion-card-content>
+      <ion-card-title color="tertiary">Bienvenido </ion-card-title>
+      <ion-card-subtitle>{{ usuario_nombre }}</ion-card-subtitle>
+    </ion-card-content>
+    <img src="assets/img/logo-sesion.jpg" />
+  </ion-card>
+
+  <!---Si el tipo de usuario es 1 mostrar el boton de graficos -->
+  <ion-button
+    expand="block"
+    *ngIf="id_tipo_usuario == 1"
+    (click)="verGraficos()"
+    >Ver Graficos</ion-button
+  >
 </ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-tabs>
+      <ion-tab-bar slot="bottom" color="tertiary">
+        <ion-tab-button
+          *ngFor="let menu of ListaMenus"
+          (click)="navigateTo(menu.pagina)"
+        >
+          <ion-icon [name]="menu.icono"></ion-icon>
+          <ion-label>{{ menu.nombre }}</ion-label>
+        </ion-tab-button>
+      </ion-tab-bar>
+    </ion-tabs>
+  </ion-toolbar>
+</ion-footer>

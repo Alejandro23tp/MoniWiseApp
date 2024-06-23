@@ -5,6 +5,7 @@ import {
   LoadingController,
   ModalController,
 } from '@ionic/angular';
+
 import { GeneralService } from 'src/app/servicios/general.service';
 import { IngresoService } from 'src/app/servicios/ingreso.service';
 import { MenuService } from 'src/app/servicios/menu.service';
@@ -193,5 +194,16 @@ export class PrincipalPage implements OnInit {
 
     this.datos();
     this.obtenerMenusPorTipoUsuario();
+  }
+
+  verGraficos() {
+    this.srvG.irA('/graficos');
+   
+
+  
+   
+
+    
+              
   }
 }

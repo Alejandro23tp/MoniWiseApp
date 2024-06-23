@@ -43,6 +43,10 @@ const routes: Routes = [
     path: 'metas',
     loadChildren: () => import('./paginas/metas/metas.module').then( m => m.MetasPageModule)
   },
+  {
+    path: 'graficos',
+    loadChildren: () => import('./paginas/graficos/graficos.module').then( m => m.GraficosPageModule)
+  },
  
   
 ];

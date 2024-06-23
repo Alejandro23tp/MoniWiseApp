@@ -18,6 +18,9 @@ export class ModalcontentComponent  implements OnInit {
     this.modalController.dismiss();
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    console.log('modal');
+    
+  }
 
 }

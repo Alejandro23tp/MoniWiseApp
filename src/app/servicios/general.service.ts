@@ -10,8 +10,8 @@ export class GeneralService {
  //  public URLAPI: string = 'https://klebermera.000webhostapp.com/api/moniwiseapi/';
 // public URLAPI: string = 'http://127.0.0.1/moniwiseapi/';
 
-  //public URLAPI: string = 'https://klebermera.000webhostapp.com/api/moniwiseapi/';
-  public URLAPI: string = 'http://127.0.0.1/moniwiseapi/';
+  public URLAPI: string = 'https://klebermera.000webhostapp.com/api/moniwiseapi/';
+  //public URLAPI: string = 'http://127.0.0.1/moniwiseapi/';
 
   constructor(private router: Router, private toast: ToastController) {}
 
